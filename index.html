@@ -50,6 +50,20 @@ onclick="openModal(
   <p class="price">Rp60.000</p>
 </div>
 
+  <!-- PRODUK CUSTOM -->
+<div class="card"
+onclick="openModal(
+'Hampers Custom',
+'Harga menyesuaikan',
+'Isi bebas sesuai permintaan pembeli'
+)">
+  <img src="assets/images/hampers-custom.jpg">
+  <h3>Hampers Custom (Isi Bebas)</h3>
+  <p class="price">Harga Menyesuaikan</p>
+  <p>Bebas pilih isi sesuai kebutuhan & budget</p>
+</div>
+  
+
 <!-- PILIH PRODUK -->
 <div class="card">
   <h2>Pilih Produk</h2>
@@ -74,6 +88,23 @@ onclick="openModal(
   <textarea id="customText"
   placeholder="Tulis custom isian lain (opsional)"></textarea>
 </div>
+
+<!-- FORM HAMPERS CUSTOM -->
+<div class="card">
+  <h2>Hampers Custom (Isi Bebas)</h2>
+  <small>* Isi sesuai keinginan, harga dikonfirmasi via WhatsApp</small>
+
+  <textarea id="customFull"
+  placeholder="Contoh:
+- Gula
+- Minyak 1L
+- Sirup Marjan
+- Kurma
+- Budget ± Rp200.000"
+  rows="5"></textarea>
+</div>
+
+  
 
 <!-- SARAN PRODUK -->
 <div class="card">
@@ -118,6 +149,7 @@ function orderWA(){
   let alamat = document.getElementById("alamat").value;
   let hp = document.getElementById("hp").value;
   let customText = document.getElementById("customText").value;
+  let customFull = document.getElementById("customFull")?.value || "";
 
   let isi = [];
   document.querySelectorAll('input[type=checkbox]:checked')
@@ -131,13 +163,21 @@ function orderWA(){
   let pesan =
 `Halo, saya mau pesan hampers:
 
-Produk: ${produk}
 Nama: ${nama}
 Alamat: ${alamat}
 No HP: ${hp}
 
-Custom Pilihan: ${isi.join(", ") || "-"}
-Custom Tambahan: ${customText || "-"}
+Produk Dipilih:
+${produk}
+
+Custom Pilihan:
+${isi.join(", ") || "-"}
+
+Custom Isi Bebas:
+${customFull || "-"}
+
+Catatan Tambahan:
+${customText || "-"}
 
 Mohon info total harga.`;
 
@@ -147,7 +187,4 @@ Mohon info total harga.`;
   );
 }
 </script>
-
-</body>
-</html>
 
