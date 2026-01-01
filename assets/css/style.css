@@ -33,3 +33,40 @@ button{
   border-radius:10px;
   font-size:16px;
 }
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f6f7fb;
+  margin: 0;
+}
+
+.container {
+  max-width: 480px;
+  margin: auto;
+  padding: 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0,0,0,.12);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+
+.price {
+  color: #0b7a3e;
+  font-weight: 700;
+}
