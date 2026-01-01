@@ -92,3 +92,21 @@ document.addEventListener("input", function () {
     errorBox.style.display = "none";
   }
 });
+function launchConfetti() {
+  for (let i = 0; i < 18; i++) {
+    const confetti = document.createElement("div");
+    confetti.className = "confetti";
+
+    const colors = ["#f5c46c", "#25D366", "#0b7a3e", "#ffffff"];
+    confetti.style.background =
+      colors[Math.floor(Math.random() * colors.length)];
+
+    confetti.style.left = Math.random() * window.innerWidth + "px";
+    confetti.style.animationDuration =
+      0.8 + Math.random() * 0.6 + "s";
+
+    document.body.appendChild(confetti);
+
+    setTimeout(() => confetti.remove(), 1500);
+  }
+}
