@@ -1,5 +1,6 @@
-
-/* === RESET & GLOBAL === */
+/* ===============================
+   RESET & GLOBAL
+================================ */
 * {
   box-sizing: border-box;
 }
@@ -7,31 +8,50 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(180deg,#f0f9f4,#e6f4ec);
+  background: linear-gradient(180deg, #f0f9f4, #e6f4ec);
   color: #1f2937;
 }
 
-/* === HEADER === */
-h1 {
+/* ===============================
+   HEADER
+================================ */
+.lebaran-title {
   text-align: center;
-  margin-bottom: 6px;
   color: #0b7a3e;
+  font-weight: 900;
+  font-size: 26px;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 6px rgba(11,122,62,.15);
 }
 
-.container p {
+.lebaran-title .icon {
+  margin: 0 6px;
+}
+
+.subtitle {
   text-align: center;
-  color: #555;
-  margin-bottom: 18px;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
-/* === LAYOUT === */
+/* ===============================
+   LAYOUT
+================================ */
 .container {
   max-width: 480px;
   margin: auto;
   padding: 16px;
 }
 
-/* === CARD PRODUK === */
+.container p {
+  text-align: center;
+  color: #555;
+}
+
+/* ===============================
+   CARD PRODUK
+================================ */
 .card {
   background: #ffffff;
   border-radius: 20px;
@@ -48,52 +68,68 @@ h1 {
   box-shadow: 0 18px 35px rgba(11,122,62,.18);
 }
 
-/* === GAMBAR === */
+.card:active {
+  transform: scale(.97);
+}
+
+/* hanya produk */
+.product-card::after {
+  content: "🎁 Lebaran";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg,#fde68a,#f59e0b);
+  color: #5c3a00;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+/* ===============================
+   GAMBAR
+================================ */
 .card img {
   width: 100%;
   border-radius: 16px;
   margin-bottom: 10px;
 }
 
-/* === HARGA === */
+/* ===============================
+   HARGA
+================================ */
 .price {
   color: #0b7a3e;
   font-weight: 800;
   font-size: 16px;
 }
 
-/* === BADGE LEBARAN === */
-.card::after {
-  content: "🎁 Lebaran";
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: linear-gradient(135deg,#f5c46c,#e0a800);
-  color: #4a3200;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 6px 10px;
-  border-radius: 999px;
-}
-
-/* === FORM === */
-input, textarea {
+/* ===============================
+   FORM
+================================ */
+input,
+textarea {
   width: 100%;
   padding: 12px;
   border-radius: 14px;
   border: 1px solid #d1d5db;
   margin-top: 8px;
   font-size: 14px;
+  font-family: inherit;
 }
 
 input:focus,
 textarea:focus {
   outline: none;
   border-color: #0b7a3e;
+  box-shadow: 0 0 0 2px rgba(11,122,62,.15);
 }
 
-/* === VALIDASI === */
+/* ===============================
+   VALIDASI UI (HALUS)
+================================ */
 #formError {
+  display: none;
   background: #fff4f4;
   color: #991b1b;
   padding: 12px;
@@ -103,7 +139,9 @@ textarea:focus {
   margin-top: 12px;
 }
 
-/* === TOMBOL WHATSAPP === */
+/* ===============================
+   BUTTON WHATSAPP
+================================ */
 button {
   width: 100%;
   padding: 16px;
@@ -116,38 +154,27 @@ button {
   font-weight: 800;
   cursor: pointer;
   transition: transform .15s ease, box-shadow .15s ease;
+  box-shadow: 0 8px 18px rgba(37,211,102,.35);
 }
 
 button:hover {
   transform: scale(1.03);
-  box-shadow: 0 10px 22px rgba(37,211,102,.45);
-}
-.lebaran-title {
-  text-align: center;
-  color: #0b7a3e;
-  font-weight: 800;
-  font-size: 24px;
-  margin-bottom: 6px;
+  box-shadow: 0 12px 24px rgba(37,211,102,.45);
 }
 
-.lebaran-title .icon {
-  margin: 0 6px;
-}
-
-.subtitle {
-  text-align: center;
-  color: #666;
-  font-size: 14px;
-  margin-bottom: 20px;
-}
+/* ===============================
+   CONFETTI (LEMBUT)
+================================ */
 .confetti {
   position: fixed;
   width: 6px;
-  height: 10px;
-  background: gold;
+  height: 6px;
+  border-radius: 2px;
+  background: radial-gradient(circle,#fde68a,#f59e0b);
   top: -10px;
-  animation: fall 1.2s linear forwards;
-  z-index: 999;
+  animation: fall 1.4s ease-out forwards;
+  z-index: 9999;
+  opacity: .9;
 }
 
 @keyframes fall {
