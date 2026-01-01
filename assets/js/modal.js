@@ -1,7 +1,10 @@
 let selectedProduct = {};
 let isCustomProduct = false;
 
-function openProduct(title, price, desc, custom){
+/* ===============================
+   OPEN MODAL
+================================ */
+function openProduct(title, price, desc, custom) {
   selectedProduct = { title, price, desc };
   isCustomProduct = custom;
 
@@ -9,53 +12,59 @@ function openProduct(title, price, desc, custom){
   document.getElementById("modalPrice").innerText = price;
   document.getElementById("modalDesc").innerText = desc;
 
+  // tampilkan custom hanya jika produk custom
   document.getElementById("customSection").style.display =
     custom ? "block" : "none";
 
-  // reset input
-  document.querySelectorAll('#modal input[type=checkbox]').forEach(c => c.checked = false);
-  document.getElementById("customText").value = "";
-  document.getElementById("buyerName").value = "";
-  document.getElementById("buyerAddress").value = "";
-  document.getElementById("buyerPhone").value = "";
+  resetForm();
+  hideError();
 
   document.getElementById("modal").style.display = "flex";
+
+  // 🎇 confetti halus
+  launchConfetti();
 }
 
-function closeModal(){
+/* ===============================
+   CLOSE MODAL
+================================ */
+function closeModal() {
   document.getElementById("modal").style.display = "none";
 }
 
+/* ===============================
+   ORDER VIA WHATSAPP
+================================ */
 function orderFromModal() {
-  const errorBox = document.getElementById("formError");
-  errorBox.style.display = "none";
-  errorBox.innerText = "";
+  hideError();
 
-  let name = document.getElementById("buyerName").value.trim();
-  let address = document.getElementById("buyerAddress").value.trim();
-  let phone = document.getElementById("buyerPhone").value.trim();
+  const name = document.getElementById("buyerName").value.trim();
+  const address = document.getElementById("buyerAddress").value.trim();
+  const phone = document.getElementById("buyerPhone").value.trim();
+  const customText = document.getElementById("customText").value.trim();
 
+  // validasi data pembeli
   if (!name || !address || !phone) {
-    showError("Mohon lengkapi nama, alamat, dan nomor WhatsApp");
+    showError("Mohon lengkapi nama, alamat, dan nomor WhatsApp 🙏");
     return;
   }
 
+  // ambil isian custom
   let isi = [];
   if (isCustomProduct) {
-    document.querySelectorAll('#modal input[type=checkbox]:checked')
+    document
+      .querySelectorAll('#modal input[type="checkbox"]:checked')
       .forEach(c => isi.push(c.value));
   }
 
-  let customText = document.getElementById("customText").value.trim();
-
-  // 🔒 VALIDASI CUSTOM
+  // validasi wajib custom
   if (isCustomProduct && isi.length === 0 && customText === "") {
-    showError("Untuk hampers custom, mohon isi minimal satu pilihan custom");
+    showError("Untuk hampers custom, mohon isi minimal satu pilihan isian ✨");
     return;
   }
 
-  let pesan =
-`Halo, saya mau pesan hampers:
+  const pesan = `
+Halo, saya mau pesan hampers 🎁
 
 Nama: ${name}
 Alamat: ${address}
@@ -73,7 +82,8 @@ ${isi.join(", ") || "-"}
 Catatan Tambahan:
 ${customText || "-"}
 
-Apakah masih tersedia ?.`;
+Mohon info ketersediaan & total harga 🙏
+`;
 
   window.open(
     "https://wa.me/62895339847320?text=" + encodeURIComponent(pesan),
@@ -81,19 +91,39 @@ Apakah masih tersedia ?.`;
   );
 }
 
-function showError(msg) {
-  const errorBox = document.getElementById("formError");
-  errorBox.innerText = msg;
-  errorBox.style.display = "block";
+/* ===============================
+   UI HELPER
+================================ */
+function showError(message) {
+  const box = document.getElementById("formError");
+  box.innerText = message;
+  box.style.display = "block";
 }
-document.addEventListener("input", function () {
-  const errorBox = document.getElementById("formError");
-  if (errorBox) {
-    errorBox.style.display = "none";
-  }
-});
+
+function hideError() {
+  const box = document.getElementById("formError");
+  if (box) box.style.display = "none";
+}
+
+function resetForm() {
+  document
+    .querySelectorAll('#modal input[type="checkbox"]')
+    .forEach(c => (c.checked = false));
+
+  document.getElementById("customText").value = "";
+  document.getElementById("buyerName").value = "";
+  document.getElementById("buyerAddress").value = "";
+  document.getElementById("buyerPhone").value = "";
+}
+
+// sembunyikan error saat user mulai mengetik
+document.addEventListener("input", hideError);
+
+/* ===============================
+   CONFETTI LEBARAN 🎇
+================================ */
 function launchConfetti() {
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < 20; i++) {
     const confetti = document.createElement("div");
     confetti.className = "confetti";
 
@@ -103,10 +133,9 @@ function launchConfetti() {
 
     confetti.style.left = Math.random() * window.innerWidth + "px";
     confetti.style.animationDuration =
-      0.8 + Math.random() * 0.6 + "s";
+      0.8 + Math.random() * 0.7 + "s";
 
     document.body.appendChild(confetti);
-
-    setTimeout(() => confetti.remove(), 1500);
+    setTimeout(() => confetti.remove(), 1600);
   }
 }
