@@ -50,34 +50,6 @@ onclick="openProduct(
   <p class="price">Rp50.000</p>
 </div>
 
-  <!-- PRODUK CUSTOM -->
-<div class="card"
-onclick="openProduct(
-'Hampers Custom',
-'Harga menyesuaikan',
-'Isi bebas sesuai permintaan pembeli'
-)">
-  <img src="assets/images/hampers-custom.jpg">
-  <h3>Hampers Custom (Isi Bebas)</h3>
-  <p class="price">Harga Menyesuaikan</p>
-  <p>Bebas pilih isi sesuai kebutuhan & budget</p>
-</div>
-  
-
-<!-- CUSTOM ISIAN -->
-<div class="card">
-  <h2>Custom Isian Hampers</h2>
-  <small>* Harga custom ditanyakan langsung ke penjual</small>
-
-  <label><input type="checkbox" value="Sirup"> Sirup</label>
-  <label><input type="checkbox" value="Biskuit"> Biskuit</label>
-  <label><input type="checkbox" value="Kopi / Teh"> Kopi / Teh</label>
-  <label><input type="checkbox" value="Kurma"> Kurma</label>
-  <label><input type="checkbox" value="Makanan Instan"> Makanan Instan</label>
-
-  <textarea id="customText"
-  placeholder="Tulis custom isian lain (opsional)"></textarea>
-</div>
 
 <!-- FORM HAMPERS CUSTOM -->
 <div class="card">
@@ -100,7 +72,38 @@ onclick="openProduct(
 <div class="card">
   <h2>Saran Produk</h2>
   <ul>
-    <li>✔ Cocok untuk keluarga → Hampers Anyaman</li>
+    <li>✔ Cocok untuk keluarga → Hampe<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">✖</span>
+
+    <h3 id="modalTitle"></h3>
+    <p><b>Harga:</b> <span id="modalPrice"></span></p>
+
+    <p><b>Isi Produk:</b></p>
+    <p id="modalDesc"></p>
+
+    <hr>
+
+    <h4>Custom Isian</h4>
+    <small>* Harga custom dikonfirmasi via WhatsApp</small><br><br>
+
+    <label><input type="checkbox" value="Sirup"> Sirup</label><br>
+    <label><input type="checkbox" value="Biskuit"> Biskuit</label><br>
+    <label><input type="checkbox" value="Kopi / Teh"> Kopi / Teh</label><br>
+    <label><input type="checkbox" value="Kurma"> Kurma</label><br>
+    <label><input type="checkbox" value="Makanan Instan"> Makanan Instan</label>
+
+    <textarea id="customText"
+      placeholder="Tulis custom isian lain (opsional)"
+      style="width:100%;margin-top:10px"></textarea>
+
+    <button onclick="orderFromModal()"
+      style="margin-top:15px;width:100%">
+      Pesan Produk Ini
+    </button>
+  </div>
+</div>
+rs Anyaman</li>
     <li>✔ Untuk Teman → Hampers Box 1</li>
     <li>✔ Budget hemat → Hampers Box 2</li>
   </ul>
