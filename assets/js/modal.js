@@ -69,7 +69,7 @@ ${isi.join(", ") || "-"}
 Catatan Tambahan:
 ${customText || "-"}
 
-Mohon info total harga.`;
+Apakah Masih Tersedia ?.`;
 
   window.open(
     "https://wa.me/62895339847320?text=" + encodeURIComponent(pesan),
