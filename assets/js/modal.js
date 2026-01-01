@@ -26,23 +26,29 @@ function closeModal(){
   document.getElementById("modal").style.display = "none";
 }
 
-function orderFromModal(){
+function orderFromModal() {
   let name = document.getElementById("buyerName").value.trim();
   let address = document.getElementById("buyerAddress").value.trim();
   let phone = document.getElementById("buyerPhone").value.trim();
 
-  if(!name || !address || !phone){
+  if (!name || !address || !phone) {
     alert("Mohon lengkapi data pembeli");
     return;
   }
 
   let isi = [];
-  if(isCustomProduct){
+  if (isCustomProduct) {
     document.querySelectorAll('#modal input[type=checkbox]:checked')
       .forEach(c => isi.push(c.value));
   }
 
   let customText = document.getElementById("customText").value.trim();
+
+  // 🔒 VALIDASI WAJIB CUSTOM
+  if (isCustomProduct && isi.length === 0 && customText === "") {
+    alert("Mohon isi minimal satu custom isian untuk hampers custom");
+    return;
+  }
 
   let pesan =
 `Halo, saya mau pesan hampers:
