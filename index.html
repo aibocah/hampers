@@ -2,78 +2,89 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<h1 class="lebaran-title">
-  <span class="icon">🌙</span>
-  Hampers Lebaran Idul Fitri
-  <span class="icon">🎁</span>
-</h1>
-<p class="subtitle">Pilih hampers terbaik untuk keluarga & kerabat</p>
+  <meta charset="UTF-8">
+  <title>Hampers Lebaran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/modal.css">
+</head>
 
-<!-- PRODUK -->
-<div class="card"
-onclick="openProduct(
-'Hampers Anyaman',
-'Rp82.000',
-'Sirup, Gula 1kg, Biskuit Roma, Teh Celup, Kopi',
-false
-)">
-  <img src="assets/images/hampers-1.jpg">
-  <h3>Hampers Anyaman</h3>
-  <p class="price">Rp82.000</p>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <h1 class="lebaran-title">
+    <span class="icon">🌙</span>
+    Hampers Lebaran Idul Fitri
+    <span class="icon">🎁</span>
+  </h1>
+  <p class="subtitle">Pilih hampers terbaik untuk keluarga & kerabat</p>
+
+  <!-- PRODUK -->
+  <div class="card"
+  onclick="openProduct(
+    'Hampers Anyaman',
+    'Rp82.000',
+    'Sirup, Gula 1kg, Biskuit Roma, Teh Celup, Kopi',
+    false
+  )">
+    <img src="assets/images/hampers-1.jpg">
+    <h3>Hampers Anyaman</h3>
+    <p class="price">Rp82.000</p>
+  </div>
+
+  <div class="card"
+  onclick="openProduct(
+    'Hampers Box 1',
+    'Rp65.000',
+    'Teh Botol Sosro 1L, Rico Maco, Nextar, Bakmi Sedap',
+    false
+  )">
+    <img src="assets/images/hampers-2.jpg">
+    <h3>Hampers Box 1</h3>
+    <p class="price">Rp65.000</p>
+  </div>
+
+  <div class="card"
+  onclick="openProduct(
+    'Hampers Box 2',
+    'Rp50.000',
+    'Gula 1/2 kg, Teh Celup, Astor, Hatari, Bakmi Sedap',
+    false
+  )">
+    <img src="assets/images/hampers-3.jpg">
+    <h3>Hampers Box 2</h3>
+    <p class="price">Rp50.000</p>
+  </div>
+
+  <!-- PRODUK CUSTOM -->
+  <div class="card"
+  onclick="openProduct(
+    'Hampers Custom (Isi Bebas)',
+    'Harga Menyesuaikan',
+    'Isi bebas sesuai kebutuhan & budget',
+    true
+  )">
+    <img src="assets/images/hampers-custom.jpg">
+    <h3>Hampers Custom (Isi Bebas)</h3>
+    <p class="price">Harga Menyesuaikan</p>
+  </div>
+
+  <!-- SARAN -->
+  <div class="card">
+    <h2>Saran Produk</h2>
+    <ul>
+      <li>✔ Cocok untuk keluarga → Hampers Anyaman</li>
+      <li>✔ Untuk teman → Hampers Box 1</li>
+      <li>✔ Budget hemat → Hampers Box 2</li>
+    </ul>
+  </div>
+
 </div>
 
-<div class="card"
-onclick="openProduct(
-'Hampers Box 1',
-'Rp65.000',
-'Teh Botol Sosro 1L, Rico Maco, Nextar, Bakmi Sedap',
-false
-)">
-  <img src="assets/images/hampers-2.jpg">
-  <h3>Hampers Box 1</h3>
-  <p class="price">Rp65.000</p>
-</div>
-
-<div class="card"
-onclick="openProduct(
-'Hampers Box 2',
-'Rp50.000',
-'Gula 1/2 kg, Teh Celup, Astor, Hatari, Bakmi Sedap',
-false
-)">
-  <img src="assets/images/hampers-3.jpg">
-  <h3>Hampers Box 2</h3>
-  <p class="price">Rp50.000</p>
-</div>
-
-<!-- PRODUK CUSTOM -->
-<div class="card"
-onclick="openProduct(
-'Hampers Custom (Isi Bebas)',
-'Harga Menyesuaikan',
-'Isi bebas sesuai kebutuhan & budget',
-true
-)">
-  <img src="assets/images/hampers-custom.jpg">
-  <h3>Hampers Custom (Isi Bebas)</h3>
-  <p class="price">Harga Menyesuaikan</p>
-</div>
-
-<!-- SARAN -->
-<div class="card">
-  <h2>Saran Produk</h2>
-  <ul>
-    <li>✔ Cocok untuk keluarga → Hampers Anyaman</li>
-    <li>✔ Untuk teman → Hampers Box 1</li>
-    <li>✔ Budget hemat → Hampers Box 2</li>
-  </ul>
-</div>
-
-</div>
-
-<!-- MODAL (SATU-SATUNYA) -->
+<!-- MODAL -->
 <div id="modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">✖</span>
@@ -99,28 +110,16 @@ true
 
     <hr>
 
-<h4>Data Pembeli</h4>
+    <h4>Data Pembeli</h4>
+    <input id="buyerName" placeholder="Nama Lengkap">
+    <input id="buyerAddress" placeholder="Alamat Pengiriman">
+    <input id="buyerPhone" placeholder="No WhatsApp">
 
-<input id="buyerName" placeholder="Nama Lengkap" style="width:100%;margin-bottom:8px">
+    <div id="formError"></div>
 
-<input id="buyerAddress" placeholder="Alamat Pengiriman" style="width:100%;margin-bottom:8px">
-
-<input id="buyerPhone" placeholder="No WhatsApp" style="width:100%">
-<hr>
-<div id="formError"
-style="
-display:none;
-background:#ffecec;
-color:#b30000;
-padding:10px;
-border-radius:8px;
-font-size:14px;
-margin-top:12px">
-</div>
-<button onclick="orderFromModal()" style="margin-top:15px;width:100%">
-  Pesan via WhatsApp
-</button>
-
+    <button onclick="orderFromModal()">
+      Pesan via WhatsApp
+    </button>
   </div>
 </div>
 
