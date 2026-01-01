@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -18,11 +19,11 @@
 
 <!-- PRODUK -->
 <div class="card"
-onclick="openModal(
+onclick="openProduct(
 'Hampers Anyaman',
 'Rp82.000',
-'Sirup, Gula 1kg, Biskuit Roma, Teh Celup, Kopi', 
-  false
+'Sirup, Gula 1kg, Biskuit Roma, Teh Celup, Kopi',
+false
 )">
   <img src="assets/images/hampers-1.jpg">
   <h3>Hampers Anyaman</h3>
@@ -33,8 +34,8 @@ onclick="openModal(
 onclick="openProduct(
 'Hampers Box 1',
 'Rp65.000',
-'Teh Botol sosro 1L, Rico Maco, Biskui Nextar, Bakmy Sedap Tasty, Biskuit Potato', 
-  false
+'Teh Botol Sosro 1L, Rico Maco, Nextar, Bakmi Sedap',
+false
 )">
   <img src="assets/images/hampers-2.jpg">
   <h3>Hampers Box 1</h3>
@@ -45,100 +46,40 @@ onclick="openProduct(
 onclick="openProduct(
 'Hampers Box 2',
 'Rp50.000',
-'Gula 1/2 kg, Teh Celup, Astor, Biskuit Hatari, Bakmy Sedap Tasty',
-  false
+'Gula 1/2 kg, Teh Celup, Astor, Hatari, Bakmi Sedap',
+false
 )">
   <img src="assets/images/hampers-3.jpg">
   <h3>Hampers Box 2</h3>
   <p class="price">Rp50.000</p>
 </div>
 
-  <!-- PRODUK CUSTOM -->
+<!-- PRODUK CUSTOM -->
 <div class="card"
-onclick="openModal(
-'Hampers Custom',
-'Harga menyesuaikan',
-'Isi bebas sesuai permintaan pembeli' ,
-  true
+onclick="openProduct(
+'Hampers Custom (Isi Bebas)',
+'Harga Menyesuaikan',
+'Isi bebas sesuai kebutuhan & budget',
+true
 )">
   <img src="assets/images/hampers-custom.jpg">
   <h3>Hampers Custom (Isi Bebas)</h3>
   <p class="price">Harga Menyesuaikan</p>
-  <p>Bebas pilih isi sesuai kebutuhan & budget</p>
-</div>
-  
-
-<!-- FORM HAMPERS CUSTOM -->
-<div class="card">
-  <h2>Hampers Custom (Isi Bebas)</h2>
-  <small>* Isi sesuai keinginan, harga dikonfirmasi via WhatsApp</small>
-
-  <textarea id="customFull"
-  placeholder="Contoh:
-- Gula
-- Minyak 1L
-- Sirup Marjan
-- Kurma
-- Budget ± Rp200.000"
-  rows="5"></textarea>
 </div>
 
-  
-
-<!-- SARAN PRODUK -->
+<!-- SARAN -->
 <div class="card">
   <h2>Saran Produk</h2>
   <ul>
-    <li>✔ Cocok untuk keluarga → Hampe<div id="modal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">✖</span>
-
-    <h3 id="modalTitle"></h3>
-    <p><b>Harga:</b> <span id="modalPrice"></span></p>
-
-    <p><b>Isi Produk:</b></p>
-    <p id="modalDesc"></p>
-
-    <hr>
-
-    <h4>Custom Isian</h4>
-    <small>* Harga custom dikonfirmasi via WhatsApp</small><br><br>
-
-    <label><input type="checkbox" value="Sirup"> Sirup</label><br>
-    <label><input type="checkbox" value="Biskuit"> Biskuit</label><br>
-    <label><input type="checkbox" value="Kopi / Teh"> Kopi / Teh</label><br>
-    <label><input type="checkbox" value="Kurma"> Kurma</label><br>
-    <label><input type="checkbox" value="Makanan Instan"> Makanan Instan</label>
-
-    <textarea id="customText"
-      placeholder="Tulis custom isian lain (opsional)"
-      style="width:100%;margin-top:10px"></textarea>
-
-    <button onclick="orderFromModal()"
-      style="margin-top:15px;width:100%">
-      Pesan Produk Ini
-    </button>
-  </div>
-</div>
-rs Anyaman</li>
-    <li>✔ Untuk Teman → Hampers Box 1</li>
+    <li>✔ Cocok untuk keluarga → Hampers Anyaman</li>
+    <li>✔ Untuk teman → Hampers Box 1</li>
     <li>✔ Budget hemat → Hampers Box 2</li>
   </ul>
 </div>
 
-<!-- DATA PEMBELI -->
-<div class="card">
-  <h2>Data Pembeli</h2>
-  <input id="nama" placeholder="Nama Lengkap">
-  <input id="alamat" placeholder="Alamat Pengiriman">
-  <input id="hp" placeholder="No WhatsApp">
 </div>
 
-<button onclick="orderWA()">Pesan via WhatsApp</button>
-
-</div>
-
-<!-- MODAL -->
+<!-- MODAL (SATU-SATUNYA) -->
 <div id="modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">✖</span>
@@ -147,7 +88,6 @@ rs Anyaman</li>
     <p><b>Harga:</b> <span id="modalPrice"></span></p>
     <p id="modalDesc"></p>
 
-    <!-- CUSTOM ISIAN -->
     <div id="customSection" style="display:none">
       <hr>
       <h4>Custom Isian</h4>
@@ -163,59 +103,12 @@ rs Anyaman</li>
         style="width:100%;margin-top:10px"></textarea>
     </div>
 
-    <button onclick="orderFromModal()"
-      style="margin-top:15px;width:100%">
+    <button onclick="orderFromModal()" style="margin-top:15px;width:100%">
       Pesan via WhatsApp
     </button>
   </div>
 </div>
 
-
 <script src="assets/js/modal.js"></script>
-
-<script>
-function orderWA(){
-  let produk = document.getElementById("produk").value;
-  let nama = document.getElementById("nama").value;
-  let alamat = document.getElementById("alamat").value;
-  let hp = document.getElementById("hp").value;
-  let customText = document.getElementById("customText").value;
-  let customFull = document.getElementById("customFull")?.value || "";
-
-  let isi = [];
-  document.querySelectorAll('input[type=checkbox]:checked')
-    .forEach(c => isi.push(c.value));
-
-  if(nama === "" || alamat === "" || hp === ""){
-    alert("Mohon lengkapi data pembeli");
-    return;
-  }
-
-  let pesan =
-`Halo, saya mau pesan hampers:
-
-Nama: ${nama}
-Alamat: ${alamat}
-No HP: ${hp}
-
-Produk Dipilih:
-${produk}
-
-Custom Pilihan:
-${isi.join(", ") || "-"}
-
-Custom Isi Bebas:
-${customFull || "-"}
-
-Catatan Tambahan:
-${customText || "-"}
-
-Mohon info total harga.`;
-
-  window.open(
-    "https://wa.me/62895339847320?text=" + encodeURIComponent(pesan),
-    "_blank"
-  );
-}
-</script>
-
+</body>
+</html>
