@@ -86,3 +86,9 @@ function showError(msg) {
   errorBox.innerText = msg;
   errorBox.style.display = "block";
 }
+document.addEventListener("input", function () {
+  const errorBox = document.getElementById("formError");
+  if (errorBox) {
+    errorBox.style.display = "none";
+  }
+});
