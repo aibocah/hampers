@@ -1,72 +1,105 @@
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#f6f6f6;
-}
-.container{
-  max-width:500px;
-  margin:auto;
-  padding:15px;
-}
-.card{
-  background:#fff;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:15px;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-  cursor:pointer;
-}
-img{
-  width:100%;
-  border-radius:12px;
-}
-.price{
-  color:#2e7d32;
-  font-weight:bold;
-}
-button{
-  width:100%;
-  padding:15px;
-  background:#25D366;
-  color:#fff;
-  border:none;
-  border-radius:10px;
-  font-size:16px;
-}
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #f6f7fb;
-  margin: 0;
+
+/* === GLOBAL === */
+* {
+  box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg,#f6f7fb,#eef1f8);
+  color: #222;
+}
+
+/* === LAYOUT === */
 .container {
   max-width: 480px;
   margin: auto;
   padding: 16px;
 }
 
+/* === CARD PRODUK === */
 .card {
   background: #fff;
   border-radius: 18px;
   padding: 14px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   box-shadow: 0 10px 25px rgba(0,0,0,.08);
-  transition: transform .2s, box-shadow .2s;
   cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
 }
 
 .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(0,0,0,.12);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px rgba(0,0,0,.12);
 }
 
+/* === GAMBAR === */
 .card img {
   width: 100%;
   border-radius: 14px;
   margin-bottom: 10px;
 }
 
+/* === TEKS === */
+h1 {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+p {
+  line-height: 1.5;
+}
+
 .price {
   color: #0b7a3e;
   font-weight: 700;
+  font-size: 16px;
+}
+
+/* === FORM === */
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #25D366;
+}
+
+/* === VALIDASI === */
+#formError {
+  background: #ffecec;
+  color: #b30000;
+  padding: 12px;
+  border-radius: 12px;
+  border-left: 4px solid #e63946;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+/* === TOMBOL === */
+button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 14px;
+  background: linear-gradient(135deg,#25D366,#1ebd5a);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 20px rgba(37,211,102,.35);
 }
