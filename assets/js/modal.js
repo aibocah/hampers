@@ -50,7 +50,7 @@ ${custom || "-"}`
 Mohon info total harga & ketersediaan.`;
 
   window.open(
-    "https://wa.me/62NOMORWA?text=" + encodeURIComponent(pesan),
+    "https://wa.me/62895339847320?text=" + encodeURIComponent(pesan),
     "_blank"
   );
 }
