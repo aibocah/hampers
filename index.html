@@ -142,13 +142,34 @@ rs Anyaman</li>
 <div id="modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">✖</span>
+
     <h3 id="modalTitle"></h3>
     <p><b>Harga:</b> <span id="modalPrice"></span></p>
-    <p><b>Isi Hampers:</b></p>
     <p id="modalDesc"></p>
-    <small>* Bisa custom sesuai kebutuhan</small>
+
+    <!-- CUSTOM ISIAN -->
+    <div id="customSection" style="display:none">
+      <hr>
+      <h4>Custom Isian</h4>
+      <small>* Harga dikonfirmasi via WhatsApp</small><br><br>
+
+      <label><input type="checkbox" value="Sirup"> Sirup</label><br>
+      <label><input type="checkbox" value="Biskuit"> Biskuit</label><br>
+      <label><input type="checkbox" value="Kopi / Teh"> Kopi / Teh</label><br>
+      <label><input type="checkbox" value="Kurma"> Kurma</label><br>
+
+      <textarea id="customText"
+        placeholder="Tulis isian custom lain (opsional)"
+        style="width:100%;margin-top:10px"></textarea>
+    </div>
+
+    <button onclick="orderFromModal()"
+      style="margin-top:15px;width:100%">
+      Pesan via WhatsApp
+    </button>
   </div>
 </div>
+
 
 <script src="assets/js/modal.js"></script>
 
