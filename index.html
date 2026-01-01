@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,19 +6,16 @@
 <title>Hampers Lebaran Idul Fitri</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="assets/css/style.css">
-
 <style>
-/* CSS langsung di sini biar praktis dari HP */
 body{
   margin:0;
   font-family: Arial, sans-serif;
   background:#f6f6f6;
 }
 .container{
-  padding:15px;
-  max-width:480px;
+  max-width:500px;
   margin:auto;
+  padding:15px;
 }
 .card{
   background:#fff;
@@ -38,21 +36,24 @@ h1,h2,h3{
   font-weight:bold;
   font-size:18px;
 }
-label{
-  display:block;
-  margin-top:8px;
+small{
+  color:#777;
 }
 input, select, textarea{
   width:100%;
   padding:10px;
-  margin-top:5px;
+  margin-top:8px;
   border-radius:8px;
   border:1px solid #ccc;
 }
+label{
+  display:block;
+  margin-top:10px;
+}
 .checkbox label{
   display:flex;
-  align-items:center;
   gap:8px;
+  align-items:center;
 }
 button{
   background:#25D366;
@@ -62,7 +63,6 @@ button{
   padding:15px;
   font-size:16px;
   border-radius:10px;
-  cursor:pointer;
 }
 footer{
   text-align:center;
@@ -77,47 +77,71 @@ footer{
 
 <div class="container">
 
-<!-- HERO -->
+<!-- HEADER -->
 <div class="card">
-  <img src="assets/images/gemini-2.5-flash-image_berikan_foto_di_studio_foto_produk_dengan_baground_bergaya_elegan_dengan_tema_ug-2 (1).jpg" alt="Hampers Lebaran">
   <h1>Hampers Lebaran Idul Fitri</h1>
-  <p>Kirim hampers cantik & bermanfaat untuk keluarga, sahabat, dan rekan kerja.</p>
+  <p>Hampers cantik & bermanfaat untuk keluarga, sahabat, dan rekan kerja.</p>
 </div>
 
-<!-- PAKET -->
+<!-- PRODUK 1 -->
 <div class="card">
-  <h2>Pilih Paket</h2>
-  <select id="paket">
-    <option value="Paket A - Rp50.000">Paket A – Rp50.000</option>
-    <option value="Paket B - Rp100.000">Paket B – Rp100.000</option>
-    <option value="Paket C - Rp150.000">Paket C – Rp150.000</option>
+  <img src="assets/images/hampers-1.jpg">
+  <h3>Hampers Anyaman</h3>
+  <p class="price">Rp100.000</p>
+  <p>Isi standar sembako & makanan ringan.</p>
+</div>
+
+<!-- PRODUK 2 -->
+<div class="card">
+  <img src="assets/images/hampers-2.jpg">
+  <h3>Hampers Box Plastik A</h3>
+  <p class="price">Rp80.000</p>
+  <p>Isi sederhana, cocok untuk keluarga.</p>
+</div>
+
+<!-- PRODUK 3 -->
+<div class="card">
+  <img src="assets/images/hampers-3.jpg">
+  <h3>Hampers Box Plastik B</h3>
+  <p class="price">Rp60.000</p>
+  <p>Isi Sederhana, Harga Terjangkau.</p>
+</div>
+
+<!-- PILIH PRODUK -->
+<div class="card">
+  <h2>Pilih Produk</h2>
+  <select id="produk">
+    <option value="Hampers Anyaman - Rp100.000">Hampers Anyaman - Rp150.000</option>
+    <option value="Hampers Box Plastik A - Rp80.000">Hampers Box Plastik A - Rp80.000</option>
+    <option value="Hampers Box Plastik B - Rp60.000">Hampers Box Plastik B - Rp60.000</option>
   </select>
 </div>
 
-<!-- CUSTOM ISIAN -->
+<!-- CUSTOM -->
 <div class="card">
   <h2>Custom Isian Hampers</h2>
+  <small>* Harga custom isian ditanyakan langsung ke penjual</small>
+
   <div class="checkbox">
     <label><input type="checkbox" value="Sirup"> Sirup</label>
     <label><input type="checkbox" value="Biskuit"> Biskuit</label>
     <label><input type="checkbox" value="Kopi / Teh"> Kopi / Teh</label>
     <label><input type="checkbox" value="Kurma"> Kurma</label>
-    <label><input type="checkbox" value="Mie / Makanan Instan"> Mie / Makanan Instan</label>
+    <label><input type="checkbox" value="Makanan Instan"> Makanan Instan</label>
   </div>
 
-  <textarea id="catatan" placeholder="Catatan khusus (misal: warna pita, ucapan, dll)"></textarea>
+  <textarea id="catatan" placeholder="Catatan custom / permintaan khusus"></textarea>
 </div>
 
 <!-- DATA PEMESAN -->
 <div class="card">
   <h2>Data Pemesan</h2>
   <input id="nama" placeholder="Nama Lengkap">
-  <input id="alamat" placeholder="Alamat Lengkap">
+  <input id="alamat" placeholder="Alamat Pengiriman">
   <input id="hp" placeholder="No WhatsApp">
 </div>
 
-<!-- BUTTON -->
-<button onclick="kirimPesan()">Pesan Sekarang via WhatsApp</button>
+<button onclick="pesanWA()">Pesan via WhatsApp</button>
 
 <footer>
   © Hampers Lebaran • Order via WhatsApp
@@ -126,8 +150,8 @@ footer{
 </div>
 
 <script>
-function kirimPesan(){
-  let paket = document.getElementById("paket").value;
+function pesanWA(){
+  let produk = document.getElementById("produk").value;
   let nama = document.getElementById("nama").value;
   let alamat = document.getElementById("alamat").value;
   let hp = document.getElementById("hp").value;
@@ -135,26 +159,30 @@ function kirimPesan(){
 
   let isi = [];
   document.querySelectorAll('input[type=checkbox]:checked')
-    .forEach(item => isi.push(item.value));
+    .forEach(c => isi.push(c.value));
 
   if(nama === "" || alamat === "" || hp === ""){
     alert("Mohon lengkapi data pemesan");
     return;
   }
 
-  let text =
-`Assalamu’alaikum, saya mau pesan hampers:
+  let pesan =
+`Halo, saya mau pesan hampers:
 
+Produk: ${produk}
 Nama: ${nama}
 Alamat: ${alamat}
 No HP: ${hp}
 
-Paket: ${paket}
 Custom Isian: ${isi.join(", ") || "-"}
-Catatan: ${catatan || "-"}`;
+Catatan: ${catatan || "-"}
 
-  let url = "https://wa.me/62895339847320?text=" + encodeURIComponent(text);
-  window.open(url, "_blank");
+Mohon info harga custom isian.`;
+
+  window.open(
+    "https://wa.me/62895339847320?text=" + encodeURIComponent(pesan),
+    "_blank"
+  );
 }
 </script>
 
