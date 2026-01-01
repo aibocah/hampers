@@ -27,12 +27,16 @@ function closeModal(){
 }
 
 function orderFromModal() {
+  const errorBox = document.getElementById("formError");
+  errorBox.style.display = "none";
+  errorBox.innerText = "";
+
   let name = document.getElementById("buyerName").value.trim();
   let address = document.getElementById("buyerAddress").value.trim();
   let phone = document.getElementById("buyerPhone").value.trim();
 
   if (!name || !address || !phone) {
-    alert("Mohon lengkapi data pembeli");
+    showError("Mohon lengkapi nama, alamat, dan nomor WhatsApp");
     return;
   }
 
@@ -44,9 +48,9 @@ function orderFromModal() {
 
   let customText = document.getElementById("customText").value.trim();
 
-  // 🔒 VALIDASI WAJIB CUSTOM
+  // 🔒 VALIDASI CUSTOM
   if (isCustomProduct && isi.length === 0 && customText === "") {
-    alert("Mohon isi minimal satu custom isian untuk hampers custom");
+    showError("Untuk hampers custom, mohon isi minimal satu pilihan custom");
     return;
   }
 
@@ -69,10 +73,16 @@ ${isi.join(", ") || "-"}
 Catatan Tambahan:
 ${customText || "-"}
 
-Apakah Masih Tersedia ?.`;
+Apakah masih tersedia ?.`;
 
   window.open(
     "https://wa.me/62895339847320?text=" + encodeURIComponent(pesan),
     "_blank"
   );
+}
+
+function showError(msg) {
+  const errorBox = document.getElementById("formError");
+  errorBox.innerText = msg;
+  errorBox.style.display = "block";
 }
