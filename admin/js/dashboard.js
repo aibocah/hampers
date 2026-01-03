@@ -1,6 +1,5 @@
 /* ==================================================
    ADMIN DASHBOARD — FINAL VERSION
-   (ORDER + PRODUK)
    ================================================== */
 
 import { db } from "./firebase.js";
@@ -17,9 +16,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* ===============================
-   ELEMENT
-================================ */
+/* ELEMENT */
 const orderList = document.getElementById("orderList");
 const totalOrderEl = document.getElementById("totalOrder");
 const totalOmzetEl = document.getElementById("totalOmzet");
@@ -27,8 +24,13 @@ const totalOmzetEl = document.getElementById("totalOmzet");
 const productForm = document.getElementById("productForm");
 const productList = document.getElementById("productList");
 
+const titleInput = document.getElementById("title");
+const priceInput = document.getElementById("price");
+const descInput = document.getElementById("desc");
+const imageInput = document.getElementById("image");
+
 /* ===============================
-   ======= ORDER SECTION =========
+   ORDER
 ================================ */
 const orderQuery = query(
   collection(db, "orders"),
@@ -43,10 +45,7 @@ onSnapshot(orderQuery, snapshot => {
 
   snapshot.forEach(docSnap => {
     const o = docSnap.data();
-
-    const priceNumber = parseInt(
-      (o.price || "0").replace(/\D/g, "")
-    );
+    const priceNumber = parseInt((o.price || "0").replace(/\D/g, ""));
     totalOmzet += priceNumber;
 
     orderList.innerHTML += `
@@ -68,51 +67,35 @@ onSnapshot(orderQuery, snapshot => {
   });
 
   totalOrderEl.textContent = totalOrder;
-  totalOmzetEl.textContent =
-    "Rp " + totalOmzet.toLocaleString("id-ID");
+  totalOmzetEl.textContent = "Rp " + totalOmzet.toLocaleString("id-ID");
 });
 
-/* UPDATE STATUS ORDER */
 window.updateStatus = async (id, status) => {
-  try {
-    await updateDoc(doc(db, "orders", id), { status });
-  } catch (err) {
-    console.error("Gagal update status:", err);
-    alert("Gagal update status");
-  }
+  await updateDoc(doc(db, "orders", id), { status });
 };
 
 /* ===============================
-   ======= PRODUCT SECTION =======
+   PRODUK
 ================================ */
-
-/* TAMBAH PRODUK */
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  try {
-    await addDoc(collection(db, "products"), {
-      title: title.value,
-      price: Number(price.value),
-      desc: desc.value,
-      image: image.value,
-      createdAt: serverTimestamp()
-    });
+  await addDoc(collection(db, "products"), {
+    title: titleInput.value,
+    price: Number(priceInput.value),
+    desc: descInput.value,
+    image: imageInput.value,
+    active: true,
+    createdAt: serverTimestamp()
+  });
 
-    productForm.reset();
-    loadProducts();
-    alert("Produk berhasil ditambahkan 🤍");
-
-  } catch (err) {
-    console.error(err);
-    alert("Gagal menambahkan produk");
-  }
+  productForm.reset();
+  loadProducts();
+  alert("Produk berhasil ditambahkan 🤍");
 });
 
-/* LOAD PRODUK */
 async function loadProducts() {
   productList.innerHTML = "⏳ Loading produk...";
-
   const snapshot = await getDocs(collection(db, "products"));
   productList.innerHTML = "";
 
@@ -137,38 +120,22 @@ async function loadProducts() {
   });
 }
 
-/* UPDATE PRODUK */
 window.updateProduct = async (id) => {
-  try {
-    await updateDoc(doc(db, "products", id), {
-      title: document.getElementById(`title-${id}`).value,
-      price: Number(document.getElementById(`price-${id}`).value),
-      desc: document.getElementById(`desc-${id}`).value,
-      image: document.getElementById(`image-${id}`).value
-    });
+  await updateDoc(doc(db, "products", id), {
+    title: document.getElementById(`title-${id}`).value,
+    price: Number(document.getElementById(`price-${id}`).value),
+    desc: document.getElementById(`desc-${id}`).value,
+    image: document.getElementById(`image-${id}`).value
+  });
 
-    alert("Produk berhasil diupdate ✨");
-
-  } catch (err) {
-    console.error(err);
-    alert("Gagal update produk");
-  }
+  alert("Produk berhasil diupdate ✨");
 };
 
-/* HAPUS PRODUK */
 window.deleteProduct = async (id) => {
   if (!confirm("Yakin hapus produk ini?")) return;
-
-  try {
-    await deleteDoc(doc(db, "products", id));
-    loadProducts();
-    alert("Produk berhasil dihapus 🗑️");
-
-  } catch (err) {
-    console.error(err);
-    alert("Gagal hapus produk");
-  }
+  await deleteDoc(doc(db, "products", id));
+  loadProducts();
 };
 
-/* INIT */
 loadProducts();
+
