@@ -13,6 +13,15 @@ body {
 }
 
 /* ===============================
+   LAYOUT
+================================ */
+.container {
+  max-width: 480px;
+  margin: auto;
+  padding: 16px;
+}
+
+/* ===============================
    HEADER
 ================================ */
 .lebaran-title {
@@ -22,6 +31,8 @@ body {
   font-size: 26px;
   margin-bottom: 6px;
   text-shadow: 0 2px 6px rgba(11,122,62,.15);
+  position: relative;
+  z-index: 0;
 }
 
 .lebaran-title .icon {
@@ -33,24 +44,12 @@ body {
   color: #666;
   font-size: 14px;
   margin-bottom: 20px;
+  position: relative;
+  z-index: 0;
 }
 
 /* ===============================
-   LAYOUT
-================================ */
-.container {
-  max-width: 480px;
-  margin: auto;
-  padding: 16px;
-}
-
-.container p {
-  text-align: center;
-  color: #555;
-}
-
-/* ===============================
-   CARD PRODUK
+   CARD (GLOBAL)
 ================================ */
 .card {
   background: #ffffff;
@@ -61,6 +60,7 @@ body {
   cursor: pointer;
   transition: transform .25s ease, box-shadow .25s ease;
   position: relative;
+  z-index: 1; /* FIX BUG CLICK MOBILE */
 }
 
 .card:hover {
@@ -72,7 +72,10 @@ body {
   transform: scale(.97);
 }
 
-/* hanya produk */
+/* ===============================
+   CARD TYPE
+================================ */
+/* produk */
 .product-card::after {
   content: "🎁 Lebaran";
   position: absolute;
@@ -86,18 +89,29 @@ body {
   border-radius: 999px;
 }
 
+/* info / saran */
+.info-card {
+  cursor: default;
+}
+
 /* ===============================
-   GAMBAR
+   GAMBAR PRODUK
 ================================ */
 .card img {
   width: 100%;
   border-radius: 16px;
   margin-bottom: 10px;
+  display: block;
 }
 
 /* ===============================
-   HARGA
+   TEKS & HARGA
 ================================ */
+.card h3 {
+  margin: 6px 0 4px;
+  font-size: 16px;
+}
+
 .price {
   color: #0b7a3e;
   font-weight: 800;
@@ -126,7 +140,7 @@ textarea:focus {
 }
 
 /* ===============================
-   VALIDASI UI (HALUS)
+   VALIDASI
 ================================ */
 #formError {
   display: none;
@@ -140,7 +154,7 @@ textarea:focus {
 }
 
 /* ===============================
-   BUTTON WHATSAPP
+   BUTTON
 ================================ */
 button {
   width: 100%;
@@ -163,7 +177,7 @@ button:hover {
 }
 
 /* ===============================
-   CONFETTI (LEMBUT)
+   CONFETTI (OPTIONAL EFFECT)
 ================================ */
 .confetti {
   position: fixed;
@@ -183,3 +197,4 @@ button:hover {
     opacity: 0;
   }
 }
+
