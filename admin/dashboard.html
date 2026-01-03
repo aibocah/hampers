@@ -24,9 +24,25 @@
       background: #f0fdf4;
       color: #065f46;
     }
-    select {
-      padding: 6px;
-      border-radius: 8px;
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: none;
+      background: #16a34a;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button.danger {
+      background: #dc2626;
     }
     .stats {
       display: flex;
@@ -42,57 +58,102 @@
       box-shadow: 0 6px 16px rgba(0,0,0,.08);
       text-align: center;
     }
+    .card {
+      background: #fff;
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.08);
+      margin-top: 16px;
+    }
+    .product-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .product-item img {
+      max-width: 180px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- HEADER -->
-    <h2>📊 Admin Dashboard</h2>
-    <p>Manajemen order hampers lebaran</p>
+  <!-- HEADER -->
+  <h2>📊 Admin Dashboard</h2>
+  <p>Manajemen order & produk hampers lebaran</p>
 
-    <button onclick="logout()">🚪 Logout</button>
+  <button onclick="logout()">🚪 Logout</button>
 
-    <!-- STATS -->
-    <div class="stats">
-      <div class="stat-card">
-        <h4>Total Order</h4>
-        <strong id="totalOrder">0</strong>
-      </div>
-      <div class="stat-card">
-        <h4>Total Omzet</h4>
-        <strong id="totalOmzet">Rp 0</strong>
-      </div>
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card">
+      <h4>Total Order</h4>
+      <strong id="totalOrder">0</strong>
     </div>
-
-    <hr>
-
-    <!-- TABLE -->
-    <h3>📦 List Order</h3>
-
-    <div style="overflow-x:auto">
-      <table>
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Produk</th>
-            <th>Harga</th>
-            <th>WA</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="orderList"></tbody>
-      </table>
+    <div class="stat-card">
+      <h4>Total Omzet</h4>
+      <strong id="totalOmzet">Rp 0</strong>
     </div>
-
   </div>
 
-  <!-- FIREBASE & MODULE JS -->
-  <script type="module" src="../assets/js/firebase.js"></script>
-  <script type="module" src="../assets/js/admin-dashboard.js"></script>
-  <script type="module" src="../assets/js/auth.js"></script>
+  <hr>
+
+  <!-- ===================== -->
+  <!-- TAMBAH PRODUK -->
+  <!-- ===================== -->
+  <div class="card">
+    <h3>➕ Tambah Produk</h3>
+
+    <form id="productForm">
+      <input type="text" id="title" placeholder="Nama Produk" required>
+      <input type="number" id="price" placeholder="Harga" required>
+      <textarea id="desc" placeholder="Deskripsi Produk"></textarea>
+      <input type="text" id="image" placeholder="Link Gambar (https://...)" required>
+      <button type="submit">💾 Simpan Produk</button>
+    </form>
+  </div>
+
+  <!-- ===================== -->
+  <!-- LIST PRODUK -->
+  <!-- ===================== -->
+  <div class="card">
+    <h3>🛍️ Daftar Produk</h3>
+    <div id="productList"></div>
+  </div>
+
+  <hr>
+
+  <!-- ===================== -->
+  <!-- LIST ORDER -->
+  <!-- ===================== -->
+  <h3>📦 List Order</h3>
+
+  <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Produk</th>
+          <th>Harga</th>
+          <th>WA</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="orderList"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- MODULE JS -->
+<script type="module" src="../assets/js/firebase.js"></script>
+<script type="module" src="../assets/js/dashboard.js"></script>
+<script type="module" src="../assets/js/auth.js"></script>
 
 </body>
 </html>
