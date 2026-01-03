@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Hampers Anyaman",
+    "price": 83000,
+    "desc": "Fanta 1L, Gula Rose Brand 1kg, Teh Celup, Kopi Hitam, Roma Kelapa",
+    "image": "assets/img/hampers/hampers-1.jpg",
+    "custom": false,
+    "active": true
+  },
+  {
+    "id": 2,
+    "title": "Hampers Paket 3",
+    "price": 75000,
+    "desc": "Sirup ABC Orange, Kopi Kapal Api, Gula Rose Brand 1kg, Kokola Majo, Astor 2, Nabati Big Rolls",
+    "image": "assets/img/hampers/hampers-2.jpg",
+    "custom": false,
+    "active": true
+  },
+  {
+    "id": 3,
+    "title": "Hampers Paket 2",
+    "price": 60000,
+    "desc": "Teh Botol Sosro 1L, Biskotto Potato, Kokola Majo, Nextar, Mie Tasty Bakmi Ayam",
+    "image": "assets/img/hampers/hampers-3.jpg",
+    "custom": false,
+    "active": true
+  },
+  {
+    "id": 4,
+    "title": "Hampers Custom (Isi Bebas)",
+    "price": 0,
+    "desc": "Isi bebas sesuai kebutuhan & budget",
+    "image": "assets/img/hampers/hampers-custom.jpg",
+    "custom": true,
+    "active": true
+  }
+]
