@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Produk Hampers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f0fdf4;
+      padding: 20px;
+    }
+    h1 {
+      color: #065f46;
+    }
+    .card {
+      background: #fff;
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.1);
+      margin-bottom: 20px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #d1fae5;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    button {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.danger {
+      background: #dc2626;
+    }
+    .product {
+      border: 1px solid #d1fae5;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    pre {
+      background: #022c22;
+      color: #ecfdf5;
+      padding: 16px;
+      border-radius: 12px;
+      max-height: 300px;
+      overflow: auto;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🎁 Admin Editor Produk Hampers</h1>
+
+<div class="card">
+  <h3>➕ Tambah Produk</h3>
+
+  <input id="title" placeholder="Nama Produk">
+  <input id="price" type="number" placeholder="Harga (0 untuk custom)">
+  <input id="image" placeholder="Path Gambar (assets/img/hampers/...)">
+  <textarea id="desc" placeholder="Deskripsi produk"></textarea>
+
+  <select id="custom">
+    <option value="false">Bukan Custom</option>
+    <option value="true">Produk Custom</option>
+  </select>
+
+  <select id="active">
+    <option value="true">Aktif</option>
+    <option value="false">Nonaktif</option>
+  </select>
+
+  <button onclick="addProduct()">Tambah Produk</button>
+</div>
+
+<div class="card">
+  <h3>📦 Daftar Produk</h3>
+  <div id="productList"></div>
+</div>
+
+<div class="card">
+  <h3>📄 Hasil JSON (COPY KE products.json)</h3>
+  <pre id="jsonOutput">[]</pre>
+</div>
+
+<script>
+let products = [];
+
+function addProduct() {
+  products.push({
+    id: Date.now(),
+    title: title.value,
+    price: Number(price.value),
+    image: image.value,
+    desc: desc.value,
+    custom: custom.value === "true",
+    active: active.value === "true"
+  });
+
+  title.value = "";
+  price.value = "";
+  image.value = "";
+  desc.value = "";
+
+  render();
+}
+
+function deleteProduct(id) {
+  products = products.filter(p => p.id !== id);
+  render();
+}
+
+function render() {
+  productList.innerHTML = "";
+
+  products.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <b>${p.title}</b><br>
+      Rp ${p.price || "Custom"}<br>
+      <small>${p.active ? "🟢 Aktif" : "🔴 Nonaktif"}</small><br><br>
+      <button class="danger" onclick="deleteProduct(${p.id})">Hapus</button>
+    `;
+    productList.appendChild(div);
+  });
+
+  jsonOutput.textContent = JSON.stringify(products, null, 2);
+}
+</script>
+
+</body>
+</html>
