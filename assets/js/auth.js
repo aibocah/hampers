@@ -1,5 +1,5 @@
 /* ==================================================
-   AUTH.JS — FINAL VERSION (FIREBASE AUTH)
+   AUTH.JS — FINAL (FIREBASE AUTH)
 ================================================== */
 
 import { auth } from "./firebase.js";
@@ -15,12 +15,12 @@ import {
 window.login = async function () {
   const email = document.getElementById("username").value.trim();
   const password = document.getElementById("passwordInput").value.trim();
-  const loginError = document.getElementById("loginError");
+  const errorBox = document.getElementById("loginError");
 
-  loginError.textContent = "";
+  errorBox.textContent = "";
 
   if (!email || !password) {
-    loginError.textContent = "Email dan password wajib diisi";
+    errorBox.textContent = "❌ Email dan password wajib diisi";
     return;
   }
 
@@ -29,18 +29,17 @@ window.login = async function () {
     window.location.href = "dashboard.html";
   } catch (err) {
     console.error(err);
-    loginError.textContent = "❌ Login gagal. Cek email atau password";
+    errorBox.textContent = "❌ Login gagal. Email atau password salah";
   }
 };
 
 /* ===============================
-   CHECK AUTH (AUTO)
+   PROTECT DASHBOARD
 ================================ */
 onAuthStateChanged(auth, user => {
   const isDashboard = location.pathname.includes("dashboard");
-
   if (isDashboard && !user) {
-    location.href = "login.html";
+    window.location.href = "login.html";
   }
 });
 
@@ -51,3 +50,4 @@ window.logout = async function () {
   await signOut(auth);
   window.location.href = "login.html";
 };
+
