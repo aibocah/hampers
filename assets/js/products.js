@@ -2,43 +2,55 @@ document.addEventListener("DOMContentLoaded", () => {
   const productList = document.getElementById("productList");
 
   if (!productList) {
-    console.error("Element #productList tidak ditemukan");
+    console.error("productList tidak ditemukan");
     return;
   }
 
-  let products = JSON.parse(localStorage.getItem("products")) || [];
+  let products = [];
 
-  // fallback ke products.json
-  if (products.length === 0) {
-    fetch("products.json")
-      .then(res => res.json())
-      .then(data => {
-        products = data;
-        localStorage.setItem("products", JSON.stringify(products));
-        renderProducts(products);
-      })
-      .catch(() => {
-        productList.innerHTML = "<p>Produk belum tersedia</p>";
-      });
-  } else {
-    renderProducts(products);
+  try {
+    products = JSON.parse(localStorage.getItem("products")) || [];
+  } catch (e) {
+    console.error("LocalStorage rusak", e);
+    products = [];
   }
 
-  function renderProducts(products) {
+  // jika ada data dari admin
+  if (products.length > 0) {
+    render(products);
+    return;
+  }
+
+  // fallback products.json
+  fetch("products.json")
+    .then(res => res.json())
+    .then(data => {
+      products = data;
+      localStorage.setItem("products", JSON.stringify(products));
+      render(products);
+    })
+    .catch(() => {
+      productList.innerHTML = "<p>Produk belum tersedia</p>";
+    });
+
+  function render(data) {
     productList.innerHTML = "";
 
-    products.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "product-card";
+    data.forEach(p => {
+      if (!p.name || !p.price) return;
 
-      div.innerHTML = `
+      const card = document.createElement("div");
+      card.className = "product-card";
+
+      card.innerHTML = `
         <img src="${p.image}" alt="${p.name}">
         <h3>${p.name}</h3>
         <p>${p.description}</p>
         <strong>Rp ${Number(p.price).toLocaleString("id-ID")}</strong>
+        <button onclick='openModal(${JSON.stringify(p)})'>Pesan</button>
       `;
 
-      productList.appendChild(div);
+      productList.appendChild(card);
     });
   }
 });
