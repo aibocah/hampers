@@ -1,5 +1,5 @@
 /* ==================================================
-   ORDER.JS — FINAL (RENDER PRODUK DARI FIRESTORE)
+   ORDER.JS — FINAL (RENDER PRODUK AKTIF DARI ADMIN)
 ================================================== */
 
 import { db } from "./firebase.js";
@@ -7,15 +7,14 @@ import {
   collection,
   getDocs,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* ===============================
-   ELEMENT
-================================ */
+/* ELEMENT */
 const productList = document.getElementById("productList");
 
-/* modal */
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const modalPrice = document.getElementById("modalPrice");
@@ -28,58 +27,47 @@ const buyerPhone = document.getElementById("buyerPhone");
 const customText = document.getElementById("customText");
 const formError = document.getElementById("formError");
 
-/* ===============================
-   STATE
-================================ */
 let selectedProduct = null;
 
 /* ===============================
-   LOAD PRODUCTS
-   👉 DIPANGGIL OTOMATIS SAAT FILE DIBUKA
+   LOAD PRODUK AKTIF
 ================================ */
 async function loadProducts() {
   productList.innerHTML = "⏳ Memuat produk...";
 
-  try {
-    const snapshot = await getDocs(collection(db, "products"));
-    productList.innerHTML = "";
+  const q = query(
+    collection(db, "products"),
+    where("active", "==", true)
+  );
 
-    if (snapshot.empty) {
-      productList.innerHTML = "❌ Belum ada produk";
-      return;
-    }
+  const snapshot = await getDocs(q);
+  productList.innerHTML = "";
 
-    snapshot.forEach(docSnap => {
-      const p = docSnap.data();
-
-      const card = document.createElement("div");
-      card.className = "card product-card";
-      card.innerHTML = `
-        <img src="${p.image}" alt="${p.title}">
-        <h3>${p.title}</h3>
-        <p class="price">
-          Rp ${Number(p.price).toLocaleString("id-ID")}
-        </p>
-      `;
-
-      card.onclick = () => openProduct({
-        ...p,
-        custom: p.custom || false
-      });
-
-      productList.appendChild(card);
-    });
-  } catch (err) {
-    productList.innerHTML = "❌ Gagal load produk";
-    console.error(err);
+  if (snapshot.empty) {
+    productList.innerHTML = "❌ Belum ada produk aktif";
+    return;
   }
+
+  snapshot.forEach(docSnap => {
+    const p = docSnap.data();
+
+    const card = document.createElement("div");
+    card.className = "card product-card";
+    card.innerHTML = `
+      <img src="${p.image}" alt="${p.title}">
+      <h3>${p.title}</h3>
+      <p class="price">Rp ${Number(p.price).toLocaleString("id-ID")}</p>
+    `;
+
+    card.onclick = () => openProduct(p);
+    productList.appendChild(card);
+  });
 }
 
-/* AUTO LOAD */
 loadProducts();
 
 /* ===============================
-   OPEN MODAL
+   MODAL
 ================================ */
 window.openProduct = function (product) {
   selectedProduct = product;
@@ -96,9 +84,6 @@ window.openProduct = function (product) {
   modal.style.display = "flex";
 };
 
-/* ===============================
-   CLOSE MODAL
-================================ */
 window.closeModal = function () {
   modal.style.display = "none";
 };
@@ -119,23 +104,31 @@ window.orderFromModal = async function () {
     return;
   }
 
-  const orderData = {
+  let customItems = [];
+  if (selectedProduct.custom) {
+    document
+      .querySelectorAll('#modal input[type="checkbox"]:checked')
+      .forEach(el => customItems.push(el.value));
+
+    if (customItems.length === 0 && !note) {
+      showError("Pilih minimal 1 isian custom ✨");
+      return;
+    }
+  }
+
+  await addDoc(collection(db, "orders"), {
     name,
     address,
     phone,
     product: selectedProduct.title,
     price: Number(selectedProduct.price),
     desc: selectedProduct.desc || "-",
+    customItems,
     note: note || "-",
     status: "baru",
     createdAt: serverTimestamp()
-  };
+  });
 
-  await addDoc(collection(db, "orders"), orderData);
-
-  /* ===============================
-     WHATSAPP
-  ================================ */
   const message = `
 Halo, saya mau pesan hampers 🎁
 
@@ -143,8 +136,11 @@ Nama: ${name}
 Alamat: ${address}
 No WA: ${phone}
 
-Produk: ${orderData.product}
-Harga: Rp ${orderData.price.toLocaleString("id-ID")}
+Produk: ${selectedProduct.title}
+Harga: Rp ${Number(selectedProduct.price).toLocaleString("id-ID")}
+
+Custom:
+${customItems.join(", ") || "-"}
 
 Catatan:
 ${note || "-"}
@@ -176,4 +172,8 @@ function resetForm() {
   buyerAddress.value = "";
   buyerPhone.value = "";
   customText.value = "";
+
+  document
+    .querySelectorAll('#modal input[type="checkbox"]')
+    .forEach(el => (el.checked = false));
 }
