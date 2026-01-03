@@ -1,8 +1,8 @@
 /* ===============================
    MODAL — FINAL & CLEAN
-================================ */
+=============================== */
 
-.modal{
+.modal {
   display: none;
   position: fixed;
   inset: 0;
@@ -13,7 +13,7 @@
 }
 
 /* isi modal */
-.modal-content{
+.modal-content {
   background: #fff;
   width: 90%;
   max-width: 420px;
@@ -24,7 +24,7 @@
 }
 
 /* tombol close */
-.close{
+.close {
   float: right;
   cursor: pointer;
   color: #ff4d4f;
@@ -33,7 +33,7 @@
 
 /* input & textarea */
 .modal-content input,
-.modal-content textarea{
+.modal-content textarea {
   width: 100%;
   padding: 8px 10px;
   margin-top: 6px;
@@ -43,7 +43,7 @@
 }
 
 /* tombol utama */
-.modal-content button{
+.modal-content button {
   width: 100%;
   margin-top: 12px;
   padding: 10px;
@@ -55,17 +55,17 @@
   cursor: pointer;
 }
 
-.modal-content button:hover{
+.modal-content button:hover {
   opacity: .9;
 }
 
 /* animasi halus */
-@keyframes modalFade{
-  from{
+@keyframes modalFade {
+  from {
     transform: scale(.95);
     opacity: 0;
   }
-  to{
+  to {
     transform: scale(1);
     opacity: 1;
   }
