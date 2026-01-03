@@ -1,9 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const productList = document.getElementById("product-list");
+  const productList = document.getElementById("productList");
+
+  if (!productList) {
+    console.error("Element #productList tidak ditemukan");
+    return;
+  }
 
   let products = JSON.parse(localStorage.getItem("products")) || [];
 
-  // fallback kalau localStorage kosong
+  // fallback ke products.json
   if (products.length === 0) {
     fetch("products.json")
       .then(res => res.json())
@@ -27,10 +32,10 @@ document.addEventListener("DOMContentLoaded", () => {
       div.className = "product-card";
 
       div.innerHTML = `
-        <img src="${p.image}" style="max-width:150px">
+        <img src="${p.image}" alt="${p.name}">
         <h3>${p.name}</h3>
         <p>${p.description}</p>
-        <strong>Rp ${p.price}</strong>
+        <strong>Rp ${Number(p.price).toLocaleString("id-ID")}</strong>
       `;
 
       productList.appendChild(div);
