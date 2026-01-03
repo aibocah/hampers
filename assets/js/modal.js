@@ -1,22 +1,24 @@
-let selectedProduct = null;
+window.selectedProduct = null;
 
 function openModal(product) {
-  selectedProduct = product;
+  window.selectedProduct = product;
 
   modalTitle.innerText = product.name;
   modalPrice.innerText = "Rp " + product.price.toLocaleString("id-ID");
   modalDesc.innerText = product.description;
 
   const slider = document.getElementById("modalSlider");
-  slider.innerHTML = "";
+  slider.innerHTML = `
+    <div class="swipe-container">
+      <div class="swipe-track">
+        ${product.images.map(img =>
+          `<img src="${img}" onclick="zoomImage('${img}')">`
+        ).join("")}
+      </div>
+    </div>
+  `;
 
-  product.images.forEach((img, i) => {
-    slider.innerHTML += `
-      <img src="${img}" class="${i === 0 ? "active" : ""}" onclick="zoomImage('${img}')">
-    `;
-  });
-
-  initModalSlider();
+  initModalSwipe();
   modal.style.display = "flex";
 }
 
@@ -24,32 +26,32 @@ function closeModal() {
   modal.style.display = "none";
 }
 
-function initModalSlider() {
-  const imgs = document.querySelectorAll("#modalSlider img");
-  let i = 0;
+// ===== SWIPE MODAL =====
+function initModalSwipe() {
+  const container = document.querySelector("#modalSlider .swipe-container");
+  const track = document.querySelector("#modalSlider .swipe-track");
+  const images = track.querySelectorAll("img");
 
-  if (imgs.length <= 1) return;
+  if (images.length <= 1) return;
 
-  setInterval(() => {
-    imgs[i].classList.remove("active");
-    i = (i + 1) % imgs.length;
-    imgs[i].classList.add("active");
-  }, 2500);
+  let index = 0;
+  let startX = 0;
+  let currentX = 0;
+
+  container.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+  });
+
+  container.addEventListener("touchmove", e => {
+    currentX = e.touches[0].clientX;
+  });
+
+  container.addEventListener("touchend", () => {
+    const diff = startX - currentX;
+
+    if (diff > 50 && index < images.length - 1) index++;
+    if (diff < -50 && index > 0) index--;
+
+    track.style.transform = `translateX(-${index * 100}%)`;
+  });
 }
-let selectedProduct = null;
-
-function openModal(product) {
-  selectedProduct = product;
-
-  document.getElementById("modalTitle").innerText = product.name;
-  document.getElementById("modalPrice").innerText =
-    "Rp " + Number(product.price).toLocaleString("id-ID");
-  document.getElementById("modalDesc").innerText = product.description;
-
-  document.getElementById("modal").style.display = "flex";
-}
-
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
-
