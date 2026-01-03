@@ -8,17 +8,31 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="container login-container">
     <h2>🔐 Login Admin</h2>
 
-    <input id="username" placeholder="Username">
-    <input id="password" type="password" placeholder="Password">
+    <input
+      id="username"
+      type="email"
+      placeholder="Email Admin"
+      autocomplete="username"
+    >
 
-    <div id="loginError"></div>
+    <input
+      id="passwordInput"
+      type="password"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <div id="loginError" class="error-text"></div>
 
     <button onclick="login()">Login</button>
   </div>
 
-  <script src="../assets/js/auth.js"></script>
+  <!-- Firebase & Auth -->
+  <script type="module" src="../assets/js/firebase.js"></script>
+  <script type="module" src="../assets/js/auth.js"></script>
 </body>
 </html>
+
