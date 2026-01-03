@@ -1,51 +1,57 @@
-
 /* ==================================================
-   MODAL ORDER + FIREBASE (FINAL VERSION)
-   ================================================== */
+   MODAL + ORDER WHATSAPP (FINAL – NO FIREBASE)
+================================================== */
 
-import { db } from "./firebase.js";
-import {
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+/* ===============================
+   ELEMENT
+================================ */
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalPrice = document.getElementById("modalPrice");
+const modalDesc = document.getElementById("modalDesc");
+const customSection = document.getElementById("customSection");
+
+const buyerName = document.getElementById("buyerName");
+const buyerAddress = document.getElementById("buyerAddress");
+const buyerPhone = document.getElementById("buyerPhone");
+const customText = document.getElementById("customText");
+const formError = document.getElementById("formError");
 
 /* ===============================
    STATE
 ================================ */
-let selectedProduct = {};
-let isCustomProduct = false;
+let selectedProduct = null;
 
 /* ===============================
    OPEN MODAL
 ================================ */
-window.openProduct = function (title, price, desc, custom) {
-  selectedProduct = { title, price, desc };
-  isCustomProduct = custom;
+function openProduct(product) {
+  selectedProduct = product;
 
-  modalTitle.innerText = title;
-  modalPrice.innerText = price;
-  modalDesc.innerText = desc;
+  modalTitle.textContent = product.title;
+  modalPrice.textContent = product.price
+    ? "Rp " + product.price.toLocaleString("id-ID")
+    : "Harga Menyesuaikan";
+  modalDesc.textContent = product.desc || "-";
 
-  customSection.style.display = custom ? "block" : "none";
+  customSection.style.display = product.custom ? "block" : "none";
 
   resetForm();
   hideError();
-
   modal.style.display = "flex";
-};
+}
 
 /* ===============================
    CLOSE MODAL
 ================================ */
-window.closeModal = function () {
+function closeModal() {
   modal.style.display = "none";
-};
+}
 
 /* ===============================
-   ORDER VIA WHATSAPP + FIREBASE
+   ORDER VIA WHATSAPP
 ================================ */
-window.orderFromModal = async function () {
+function orderFromModal() {
   hideError();
 
   const name = buyerName.value.trim();
@@ -53,70 +59,46 @@ window.orderFromModal = async function () {
   const phone = buyerPhone.value.trim();
   const note = customText.value.trim();
 
-  // VALIDASI
-  if (!name || !address || !phone) {
-    showError("Mohon lengkapi nama, alamat, dan nomor WhatsApp 🙏");
+  if (!name || !phone) {
+    showError("Nama dan nomor WhatsApp wajib diisi 🙏");
     return;
   }
 
-  // CUSTOM ITEM
+  /* custom items */
   let customItems = [];
-  if (isCustomProduct) {
+  if (selectedProduct.custom) {
     document
       .querySelectorAll('#modal input[type="checkbox"]:checked')
-      .forEach(c => customItems.push(c.value));
+      .forEach(el => customItems.push(el.value));
+
+    if (customItems.length === 0 && !note) {
+      showError("Untuk hampers custom, pilih minimal 1 isian ✨");
+      return;
+    }
   }
 
-  if (isCustomProduct && customItems.length === 0 && !note) {
-    showError("Untuk hampers custom, mohon isi minimal satu pilihan ✨");
-    return;
-  }
-
-  /* ===============================
-     SAVE TO FIRESTORE
-  ================================ */
-  try {
-    await addDoc(collection(db, "orders"), {
-      name,
-      address,
-      phone,
-      product: selectedProduct.title,
-      price: selectedProduct.price,
-      desc: selectedProduct.desc,
-      customItems,
-      note: note || "-",
-      status: "baru",
-      createdAt: serverTimestamp()
-    });
-  } catch (err) {
-    showError("Gagal menyimpan order. Coba lagi 🙏");
-    console.error(err);
-    return;
-  }
-
-  /* ===============================
-     WHATSAPP MESSAGE
-  ================================ */
   const pesan = `
 Halo, saya mau pesan hampers 🎁
 
 Nama: ${name}
-Alamat: ${address}
+Alamat: ${address || "-"}
 No WhatsApp: ${phone}
 
 Produk: ${selectedProduct.title}
-Harga: ${selectedProduct.price}
+Harga: ${
+    selectedProduct.price
+      ? "Rp " + selectedProduct.price.toLocaleString("id-ID")
+      : "Menyesuaikan"
+  }
 
-Isi Produk:
-${selectedProduct.desc}
+Isi:
+${selectedProduct.desc || "-"}
 
 Custom:
 ${customItems.join(", ") || "-"}
 
 Catatan:
 ${note || "-"}
-
-Mohon info ketersediaan & total harga 🙏
 `;
 
   window.open(
@@ -126,13 +108,13 @@ Mohon info ketersediaan & total harga 🙏
   );
 
   closeModal();
-};
+}
 
 /* ===============================
    UI HELPERS
 ================================ */
-function showError(message) {
-  formError.innerText = message;
+function showError(text) {
+  formError.textContent = text;
   formError.style.display = "block";
 }
 
@@ -141,15 +123,16 @@ function hideError() {
 }
 
 function resetForm() {
-  document
-    .querySelectorAll('#modal input[type="checkbox"]')
-    .forEach(c => (c.checked = false));
-
   buyerName.value = "";
   buyerAddress.value = "";
   buyerPhone.value = "";
   customText.value = "";
+
+  document
+    .querySelectorAll('#modal input[type="checkbox"]')
+    .forEach(el => (el.checked = false));
 }
 
-// auto hide error saat input
+/* auto hide error */
 document.addEventListener("input", hideError);
+
