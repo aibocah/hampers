@@ -1,83 +1,98 @@
 
+/* ==================================================
+   MODAL ORDER + FIREBASE (FINAL VERSION)
+   ================================================== */
+
+import { db } from "./firebase.js";
+import {
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* ===============================
+   STATE
+================================ */
 let selectedProduct = {};
 let isCustomProduct = false;
 
 /* ===============================
    OPEN MODAL
 ================================ */
-function openProduct(title, price, desc, custom) {
+window.openProduct = function (title, price, desc, custom) {
   selectedProduct = { title, price, desc };
   isCustomProduct = custom;
 
-  document.getElementById("modalTitle").innerText = title;
-  document.getElementById("modalPrice").innerText = price;
-  document.getElementById("modalDesc").innerText = desc;
+  modalTitle.innerText = title;
+  modalPrice.innerText = price;
+  modalDesc.innerText = desc;
 
-  document.getElementById("customSection").style.display =
-    custom ? "block" : "none";
+  customSection.style.display = custom ? "block" : "none";
 
   resetForm();
   hideError();
 
-  document.getElementById("modal").style.display = "flex";
-
-  launchConfetti();
-}
+  modal.style.display = "flex";
+};
 
 /* ===============================
    CLOSE MODAL
 ================================ */
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
+window.closeModal = function () {
+  modal.style.display = "none";
+};
 
 /* ===============================
-   ORDER VIA WHATSAPP + SAVE
+   ORDER VIA WHATSAPP + FIREBASE
 ================================ */
-function orderFromModal() {
+window.orderFromModal = async function () {
   hideError();
 
   const name = buyerName.value.trim();
   const address = buyerAddress.value.trim();
   const phone = buyerPhone.value.trim();
-  const customText = document.getElementById("customText").value.trim();
+  const note = customText.value.trim();
 
+  // VALIDASI
   if (!name || !address || !phone) {
     showError("Mohon lengkapi nama, alamat, dan nomor WhatsApp 🙏");
     return;
   }
 
-  let isi = [];
+  // CUSTOM ITEM
+  let customItems = [];
   if (isCustomProduct) {
     document
       .querySelectorAll('#modal input[type="checkbox"]:checked')
-      .forEach(c => isi.push(c.value));
+      .forEach(c => customItems.push(c.value));
   }
 
-  if (isCustomProduct && isi.length === 0 && customText === "") {
-    showError("Untuk hampers custom, mohon isi minimal satu pilihan isian ✨");
+  if (isCustomProduct && customItems.length === 0 && !note) {
+    showError("Untuk hampers custom, mohon isi minimal satu pilihan ✨");
     return;
   }
 
   /* ===============================
-     SIMPAN ORDER (ADMIN)
+     SAVE TO FIRESTORE
   ================================ */
-  const order = {
-    id: Date.now(),
-    date: new Date().toLocaleString("id-ID"),
-    product: selectedProduct.title,
-    price: selectedProduct.price,
-    desc: selectedProduct.desc,
-    customItems: isi.join(", ") || "-",
-    note: customText || "-",
-    name,
-    address,
-    phone
-  };
-
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
-  orders.push(order);
-  localStorage.setItem("orders", JSON.stringify(orders));
+  try {
+    await addDoc(collection(db, "orders"), {
+      name,
+      address,
+      phone,
+      product: selectedProduct.title,
+      price: selectedProduct.price,
+      desc: selectedProduct.desc,
+      customItems,
+      note: note || "-",
+      status: "baru",
+      createdAt: serverTimestamp()
+    });
+  } catch (err) {
+    showError("Gagal menyimpan order. Coba lagi 🙏");
+    console.error(err);
+    return;
+  }
 
   /* ===============================
      WHATSAPP MESSAGE
@@ -89,17 +104,17 @@ Nama: ${name}
 Alamat: ${address}
 No WhatsApp: ${phone}
 
-Produk: ${order.product}
-Harga: ${order.price}
+Produk: ${selectedProduct.title}
+Harga: ${selectedProduct.price}
 
 Isi Produk:
-${order.desc}
+${selectedProduct.desc}
 
-Custom Isian:
-${order.customItems}
+Custom:
+${customItems.join(", ") || "-"}
 
 Catatan:
-${order.note}
+${note || "-"}
 
 Mohon info ketersediaan & total harga 🙏
 `;
@@ -111,20 +126,18 @@ Mohon info ketersediaan & total harga 🙏
   );
 
   closeModal();
-}
+};
 
 /* ===============================
-   UI HELPER
+   UI HELPERS
 ================================ */
 function showError(message) {
-  const box = document.getElementById("formError");
-  box.innerText = message;
-  box.style.display = "block";
+  formError.innerText = message;
+  formError.style.display = "block";
 }
 
 function hideError() {
-  const box = document.getElementById("formError");
-  if (box) box.style.display = "none";
+  if (formError) formError.style.display = "none";
 }
 
 function resetForm() {
@@ -132,31 +145,11 @@ function resetForm() {
     .querySelectorAll('#modal input[type="checkbox"]')
     .forEach(c => (c.checked = false));
 
-  customText.value = "";
   buyerName.value = "";
   buyerAddress.value = "";
   buyerPhone.value = "";
+  customText.value = "";
 }
 
+// auto hide error saat input
 document.addEventListener("input", hideError);
-
-/* ===============================
-   CONFETTI 🎇
-================================ */
-function launchConfetti() {
-  for (let i = 0; i < 20; i++) {
-    const confetti = document.createElement("div");
-    confetti.className = "confetti";
-
-    const colors = ["#f5c46c", "#25D366", "#0b7a3e", "#ffffff"];
-    confetti.style.background =
-      colors[Math.floor(Math.random() * colors.length)];
-
-    confetti.style.left = Math.random() * window.innerWidth + "px";
-    confetti.style.animationDuration =
-      0.8 + Math.random() * 0.7 + "s";
-
-    document.body.appendChild(confetti);
-    setTimeout(() => confetti.remove(), 1600);
-  }
-}
