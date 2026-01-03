@@ -1,56 +1,56 @@
 document.addEventListener("DOMContentLoaded", () => {
   const productList = document.getElementById("productList");
+  let products = JSON.parse(localStorage.getItem("products")) || [];
 
-  if (!productList) {
-    console.error("productList tidak ditemukan");
-    return;
-  }
-
-  let products = [];
-
-  try {
-    products = JSON.parse(localStorage.getItem("products")) || [];
-  } catch (e) {
-    console.error("LocalStorage rusak", e);
-    products = [];
-  }
-
-  // jika ada data dari admin
-  if (products.length > 0) {
+  if (products.length === 0) {
+    fetch("products.json")
+      .then(r => r.json())
+      .then(data => {
+        products = data;
+        localStorage.setItem("products", JSON.stringify(products));
+        render(products);
+      });
+  } else {
     render(products);
-    return;
   }
-
-  // fallback products.json
-  fetch("products.json")
-    .then(res => res.json())
-    .then(data => {
-      products = data;
-      localStorage.setItem("products", JSON.stringify(products));
-      render(products);
-    })
-    .catch(() => {
-      productList.innerHTML = "<p>Produk belum tersedia</p>";
-    });
 
   function render(data) {
     productList.innerHTML = "";
 
     data.forEach(p => {
-      if (!p.name || !p.price) return;
-
       const card = document.createElement("div");
       card.className = "product-card";
 
       card.innerHTML = `
-        <img src="${p.image}" alt="${p.name}">
+        <div class="slider">
+          ${(p.images || []).map((img, i) =>
+            `<img src="${img}" class="${i === 0 ? "active" : ""}" onclick="zoomImage('${img}')">`
+          ).join("")}
+        </div>
+
         <h3>${p.name}</h3>
         <p>${p.description}</p>
-        <strong>Rp ${Number(p.price).toLocaleString("id-ID")}</strong>
+        <strong>Rp ${p.price.toLocaleString("id-ID")}</strong>
+
         <button onclick='openModal(${JSON.stringify(p)})'>Pesan</button>
       `;
 
       productList.appendChild(card);
+      initSlider(card);
     });
   }
 });
+
+function initSlider(card) {
+  const images = card.querySelectorAll(".slider img");
+  let index = 0;
+
+  if (images.length <= 1) return;
+
+  setInterval(() => {
+    images[index].classList.remove("active");
+    index = (index + 1) % images.length;
+    images[index].classList.add("active");
+  }, 3000);
+}
+
