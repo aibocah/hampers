@@ -2,20 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const productList = document.getElementById("productList");
   let products = JSON.parse(localStorage.getItem("products")) || [];
 
-  if (products.length === 0) {
-    fetch("products.json")
-      .then(r => r.json())
-      .then(data => {
-        products = data;
-        localStorage.setItem("products", JSON.stringify(products));
-        render(products);
-      });
-  } else {
-    render(products);
-  }
+  render(products);
 
   function render(data) {
     productList.innerHTML = "";
+
+    if (data.length === 0) {
+      // Menampilkan pesan jika tidak ada produk
+      productList.innerHTML = "<p style='text-align:center; color:#6b7280;'>Belum ada produk</p>";
+      return;
+    }
 
     data.forEach(p => {
       const card = document.createElement("div");
@@ -73,3 +69,10 @@ function initSwipe(card) {
   });
 }
 
+// ===== ZOOM IMAGE =====
+function zoomImage(src) {
+  const zoomModal = document.getElementById("zoomModal");
+  const zoomImg = document.getElementById("zoomImg");
+  zoomImg.src = src;
+  zoomModal.style.display = "flex";
+}
