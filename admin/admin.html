@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Editor Hampers</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>🛠️ Admin Editor Hampers</h2>
+
+  <form id="productForm" class="card">
+    <input id="title" placeholder="Nama Produk" required>
+    <input id="price" placeholder="Harga (kosongkan jika custom)">
+    <textarea id="desc" placeholder="Deskripsi"></textarea>
+    <input id="image" placeholder="Link gambar">
+    <label>
+      <input type="checkbox" id="custom"> Produk Custom
+    </label>
+    <button>Simpan Produk</button>
+  </form>
+
+  <h3>📦 Daftar Produk</h3>
+  <div id="productList"></div>
+</div>
+
+<script src="assets/js/admin.js"></script>
+</body>
+</html>
