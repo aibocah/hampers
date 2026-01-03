@@ -1,244 +1,51 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Admin Panel | Hampers</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="../assets/css/style.css">
-
-<style>
-body { background:#f1f5f9; }
-.admin-box {
-  background:#fff;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 12px 30px rgba(0,0,0,.1);
-  margin-bottom:20px;
-}
-.admin-header{text-align:center;margin-bottom:16px}
-.admin-header h2{margin:0;color:#0b7a3e}
-.product-item{
-  border:1px solid #e5e7eb;
-  border-radius:14px;
-  padding:12px;
-  margin-bottom:12px;
-}
-.product-item img{
-  width:100%;
-  border-radius:12px;
-  margin-bottom:8px;
-}
-.row{display:flex;gap:8px}
-.row button{flex:1}
-.danger{background:#dc2626}
-.small{font-size:12px;color:#666}
-.hidden{display:none}
-</style>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <style>
+    body { font-family: Arial; background:#f4f4f4; padding:20px }
+    .box { background:#fff; padding:20px; max-width:500px; margin:auto; border-radius:6px }
+    input, textarea, button { width:100%; padding:10px; margin:8px 0 }
+    button { background:#007bff; color:white; border:none; cursor:pointer }
+    button:hover { background:#0056b3 }
+    .hidden { display:none }
+    .product { background:#fff; padding:15px; margin:10px auto; max-width:700px; display:flex; justify-content:space-between }
+    img { max-width:80px }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
-
 <!-- LOGIN -->
-<div id="loginBox" class="admin-box">
-  <div class="admin-header">
-    <h2>🔐 Login Admin</h2>
-  </div>
-
-  <input id="username" placeholder="Username">
-  <input id="password" type="password" placeholder="Password">
+<div class="box" id="loginBox">
+  <h2>Login Admin</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
   <button onclick="login()">Login</button>
-  <div id="loginError" style="color:red;margin-top:8px"></div>
 </div>
 
-<!-- ADMIN -->
+<!-- ADMIN PANEL -->
 <div id="adminPanel" class="hidden">
 
-  <div class="admin-header">
-    <h2>🛠️ Admin Editor</h2>
-    <p class="small">Kelola produk hampers</p>
-    <button onclick="logout()">🚪 Logout</button>
+  <div class="box">
+    <h2>Tambah / Edit Produk</h2>
+    <input type="hidden" id="productId">
+    <input type="text" id="name" placeholder="Nama Produk">
+    <input type="number" id="price" placeholder="Harga">
+    <input type="file" id="image">
+    <textarea id="description" placeholder="Deskripsi"></textarea>
+    <button onclick="saveProduct()">Simpan</button>
   </div>
 
-  <!-- ADD -->
-  <div class="admin-box">
-    <h3>➕ Tambah / Edit Produk</h3>
-    <input id="pTitle" placeholder="Nama Produk">
-    <input id="pPrice" type="number" placeholder="Harga (kosong = custom)">
-    <textarea id="pDesc" placeholder="Deskripsi"></textarea>
-    <input id="pImage" placeholder="URL / path gambar">
-
-    <label>
-      <input type="checkbox" id="pCustom"> Produk Custom
-    </label>
-
-    <button onclick="saveProduct()">💾 Simpan</button>
+  <div class="box">
+    <button onclick="exportJSON()">⬇ Export products.json</button>
+    <button onclick="logout()" style="background:red">Logout</button>
   </div>
 
-  <!-- LIST -->
-  <div class="admin-box">
-    <h3>📦 Daftar Produk</h3>
-    <div id="productList"></div>
-  </div>
-
-  <!-- EXPORT -->
-  <div class="admin-box">
-    <h3>⬇️ Export Produk</h3>
-    <button onclick="exportJSON()">Download products.json</button>
-  </div>
+  <div id="productList"></div>
 
 </div>
-</div>
 
-<script>
-/* ===============================
-   CONFIG LOGIN
-================================ */
-const ADMIN_USER = "septi";
-const ADMIN_PASS = "cintaneanwar";
-
-/* ===============================
-   STATE
-================================ */
-let editIndex = null;
-
-/* ===============================
-   LOGIN
-================================ */
-function login(){
-  const u = username.value;
-  const p = password.value;
-
-  if(u===ADMIN_USER && p===ADMIN_PASS){
-    localStorage.setItem("adminLogin","true");
-    showAdmin();
-  }else{
-    loginError.innerText="Login salah";
-  }
-}
-
-function logout(){
-  localStorage.removeItem("adminLogin");
-  location.reload();
-}
-
-function showAdmin(){
-  loginBox.classList.add("hidden");
-  adminPanel.classList.remove("hidden");
-  renderProducts();
-}
-
-if(localStorage.getItem("adminLogin")){
-  showAdmin();
-}
-
-/* ===============================
-   STORAGE
-================================ */
-function getProducts(){
-  return JSON.parse(localStorage.getItem("products"))||[];
-}
-function saveProducts(p){
-  localStorage.setItem("products",JSON.stringify(p));
-}
-
-/* ===============================
-   CRUD
-================================ */
-function saveProduct(){
-  const data={
-    title:pTitle.value,
-    price:pPrice.value?Number(pPrice.value):null,
-    desc:pDesc.value,
-    image:pImage.value,
-    custom:pCustom.checked
-  };
-
-  if(!data.title||!data.image){
-    alert("Nama & gambar wajib");
-    return;
-  }
-
-  const products=getProducts();
-
-  if(editIndex!==null){
-    products[editIndex]=data;
-    editIndex=null;
-  }else{
-    products.push(data);
-  }
-
-  saveProducts(products);
-  resetForm();
-  renderProducts();
-}
-
-function renderProducts(){
-  const products=getProducts();
-  productList.innerHTML="";
-
-  if(!products.length){
-    productList.innerHTML="<p>Belum ada produk</p>";
-    return;
-  }
-
-  products.forEach((p,i)=>{
-    productList.innerHTML+=`
-    <div class="product-item">
-      <img src="${p.image}">
-      <strong>${p.title}</strong>
-      <p>${p.price?"Rp "+p.price.toLocaleString("id-ID"):"Harga Menyesuaikan"}</p>
-      <small>${p.custom?"Custom":"Normal"}</small>
-
-      <div class="row">
-        <button onclick="editProduct(${i})">✏️ Edit</button>
-        <button class="danger" onclick="deleteProduct(${i})">🗑️</button>
-      </div>
-    </div>`;
-  });
-}
-
-function editProduct(i){
-  const p=getProducts()[i];
-  pTitle.value=p.title;
-  pPrice.value=p.price||"";
-  pDesc.value=p.desc;
-  pImage.value=p.image;
-  pCustom.checked=p.custom;
-  editIndex=i;
-}
-
-function deleteProduct(i){
-  if(!confirm("Hapus produk?"))return;
-  const p=getProducts();
-  p.splice(i,1);
-  saveProducts(p);
-  renderProducts();
-}
-
-function resetForm(){
-  pTitle.value="";
-  pPrice.value="";
-  pDesc.value="";
-  pImage.value="";
-  pCustom.checked=false;
-}
-
-/* ===============================
-   EXPORT JSON
-================================ */
-function exportJSON(){
-  const data=JSON.stringify(getProducts(),null,2);
-  const blob=new Blob([data],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="products.json";
-  a.click();
-}
-</script>
-
+<script src="assets/js/admin.js"></script>
 </body>
 </html>
-
