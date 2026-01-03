@@ -1,12 +1,30 @@
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "12345";
+const ADMIN_USER = "septi";
+const ADMIN_PASS = "cintaneanwar";
 
+// Ambil elemen-elemen DOM
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const loginBox = document.getElementById("loginBox");
+const adminPanel = document.getElementById("adminPanel");
+const productListEl = document.getElementById("productList");
+const productIdField = document.getElementById("productId");
+const nameField = document.getElementById("name");
+const priceField = document.getElementById("price");
+const descriptionField = document.getElementById("description");
+const imageField = document.getElementById("image");
+
+// Load produk dari localStorage
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-/* ================= LOGIN ================= */
+// Cek login admin
+if (localStorage.getItem("adminLogin")) {
+  showAdmin();
+}
+
+// Fungsi login
 function login() {
-  const u = username.value;
-  const p = password.value;
+  const u = usernameInput.value;
+  const p = passwordInput.value;
 
   if (u === ADMIN_USER && p === ADMIN_PASS) {
     localStorage.setItem("adminLogin", "1");
@@ -27,9 +45,7 @@ function showAdmin() {
   renderProducts();
 }
 
-if (localStorage.getItem("adminLogin")) showAdmin();
-
-/* ================= IMAGE ================= */
+// Konversi file gambar ke base64
 function toBase64(file) {
   return new Promise(resolve => {
     const reader = new FileReader();
@@ -38,21 +54,19 @@ function toBase64(file) {
   });
 }
 
-/* ================= SAVE ================= */
 async function saveProduct() {
-  const id = productId.value;
-  const name = document.getElementById("name").value.trim();
-  const price = Number(document.getElementById("price").value);
-  const description = document.getElementById("description").value.trim();
-  const files = image.files;
+  const id = productIdField.value;
+  const prodName = nameField.value.trim();
+  const prodPrice = Number(priceField.value);
+  const prodDesc = descriptionField.value.trim();
+  const files = imageField.files;
 
-  if (!name || !price || !description) {
+  if (!prodName || !prodPrice || !prodDesc) {
     alert("Lengkapi data produk");
     return;
   }
 
   let images = [];
-
   if (files.length > 0) {
     for (const file of files) {
       images.push(await toBase64(file));
@@ -60,20 +74,22 @@ async function saveProduct() {
   }
 
   if (id) {
+    // Edit produk
     const i = products.findIndex(p => p.id == id);
     products[i] = {
       ...products[i],
-      name,
-      price,
-      description,
+      name: prodName,
+      price: prodPrice,
+      description: prodDesc,
       images: images.length ? images : products[i].images
     };
   } else {
+    // Tambah produk baru
     products.push({
       id: Date.now(),
-      name,
-      price,
-      description,
+      name: prodName,
+      price: prodPrice,
+      description: prodDesc,
       images
     });
   }
@@ -83,19 +99,19 @@ async function saveProduct() {
   renderProducts();
 }
 
-
-/* ================= RENDER ================= */
 function renderProducts() {
-  productList.innerHTML = "";
+  productListEl.innerHTML = "";
 
   if (products.length === 0) {
-    productList.innerHTML = "<p>Belum ada produk</p>";
+    productListEl.innerHTML = "<p>Belum ada produk</p>";
     return;
   }
 
   products.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
+
+    const imgSrc = (p.images && p.images.length) ? p.images[0] : "";
 
     div.innerHTML = `
       <div>
@@ -104,26 +120,25 @@ function renderProducts() {
         <small>${p.description}</small>
       </div>
       <div>
-        <img src="${p.image}" style="max-width:80px"><br>
+        <img src="${imgSrc}" style="max-width:80px;"><br>
         <button onclick="editProduct(${p.id})">Edit</button>
         <button onclick="deleteProduct(${p.id})" style="background:red">Hapus</button>
       </div>
     `;
 
-    productList.appendChild(div);
+    productListEl.appendChild(div);
   });
 }
 
-/* ================= EDIT ================= */
 function editProduct(id) {
   const p = products.find(p => p.id === id);
-  productId.value = p.id;
-  name.value = p.name;
-  price.value = p.price;
-  description.value = p.description;
+  productIdField.value = p.id;
+  nameField.value = p.name;
+  priceField.value = p.price;
+  descriptionField.value = p.description;
+  // Perubahan gambar tidak diisi ulang
 }
 
-/* ================= DELETE ================= */
 function deleteProduct(id) {
   if (!confirm("Hapus produk ini?")) return;
   products = products.filter(p => p.id !== id);
@@ -131,16 +146,14 @@ function deleteProduct(id) {
   renderProducts();
 }
 
-/* ================= UTIL ================= */
 function resetForm() {
-  productId.value = "";
-  name.value = "";
-  price.value = "";
-  description.value = "";
-  image.value = "";
+  productIdField.value = "";
+  nameField.value = "";
+  priceField.value = "";
+  descriptionField.value = "";
+  imageField.value = "";
 }
 
-/* ================= EXPORT ================= */
 function exportJSON() {
   const blob = new Blob(
     [JSON.stringify(products, null, 2)],
@@ -152,4 +165,3 @@ function exportJSON() {
   a.download = "products.json";
   a.click();
 }
-
