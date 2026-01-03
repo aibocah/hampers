@@ -1,19 +1,18 @@
 /* ==================================================
    PRODUCTS.JS — FINAL (LOCALSTORAGE)
-   Render produk dari admin editor
 ================================================== */
 
 const productList = document.getElementById("productList");
 
 /* ===============================
-   AMBIL DATA
+   GET DATA
 ================================ */
 function getProducts() {
   return JSON.parse(localStorage.getItem("products")) || [];
 }
 
 /* ===============================
-   RENDER PRODUK
+   RENDER
 ================================ */
 function renderProducts() {
   const products = getProducts();
@@ -30,7 +29,7 @@ function renderProducts() {
     card.className = "card product-card";
 
     card.innerHTML = `
-      <img src="${product.image}" alt="${product.title}">
+      <img src="${product.image}">
       <h3>${product.title}</h3>
       <p class="price">
         ${
