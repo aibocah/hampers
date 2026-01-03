@@ -1,33 +1,90 @@
-
 /* ==================================================
-   ORDER.JS — FINAL VERSION (FIREBASE)
+   ORDER.JS — FINAL (RENDER PRODUK DARI ADMIN)
    ================================================== */
 
 import { db } from "./firebase.js";
 import {
   collection,
+  getDocs,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===============================
-   STATE GLOBAL
+   ELEMENT
 ================================ */
-let selectedProduct = {};
-let isCustomProduct = false;
+const productList = document.getElementById("productList");
+
+/* modal elements (sudah ada di HTML) */
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalPrice = document.getElementById("modalPrice");
+const modalDesc = document.getElementById("modalDesc");
+const customSection = document.getElementById("customSection");
+
+const buyerName = document.getElementById("buyerName");
+const buyerAddress = document.getElementById("buyerAddress");
+const buyerPhone = document.getElementById("buyerPhone");
+const customText = document.getElementById("customText");
+const formError = document.getElementById("formError");
 
 /* ===============================
-   OPEN PRODUCT (MODAL)
+   STATE
 ================================ */
-window.openProduct = function (title, price, desc, custom) {
-  selectedProduct = { title, price, desc };
-  isCustomProduct = custom;
+let selectedProduct = null;
 
-  modalTitle.textContent = title;
-  modalPrice.textContent = price;
-  modalDesc.textContent = desc;
+/* ===============================
+   LOAD PRODUK DARI ADMIN
+================================ */
+async function loadProducts() {
+  productList.innerHTML = "⏳ Memuat produk...";
 
-  customSection.style.display = custom ? "block" : "none";
+  const q = query(
+    collection(db, "products"),
+    where("active", "==", true)
+  );
+
+  const snapshot = await getDocs(q);
+  productList.innerHTML = "";
+
+  snapshot.forEach(docSnap => {
+    const p = docSnap.data();
+
+    const card = document.createElement("div");
+    card.className = "card product-card";
+    card.innerHTML = `
+      <img src="${p.image}" alt="${p.title}">
+      <h3>${p.title}</h3>
+      <p class="price">
+        Rp ${Number(p.price).toLocaleString("id-ID")}
+      </p>
+    `;
+
+    card.onclick = () => openProduct(p);
+    productList.appendChild(card);
+  });
+
+  if (snapshot.empty) {
+    productList.innerHTML = "❌ Belum ada produk aktif";
+  }
+}
+
+loadProducts();
+
+/* ===============================
+   OPEN MODAL
+================================ */
+window.openProduct = function (product) {
+  selectedProduct = product;
+
+  modalTitle.textContent = product.title;
+  modalPrice.textContent =
+    "Rp " + Number(product.price).toLocaleString("id-ID");
+  modalDesc.textContent = product.desc || "";
+
+  customSection.style.display = product.custom ? "block" : "none";
 
   resetForm();
   hideError();
@@ -53,72 +110,56 @@ window.orderFromModal = async function () {
   const note = customText.value.trim();
 
   if (!name || !address || !phone) {
-    showError("Mohon lengkapi nama, alamat, dan nomor WhatsApp 🙏");
+    showError("Nama, alamat, dan WhatsApp wajib diisi 🙏");
     return;
   }
 
-  /* ===============================
-     CUSTOM ITEMS
-  ================================ */
+  /* custom items */
   let customItems = [];
-  if (isCustomProduct) {
+  if (selectedProduct.custom) {
     document
       .querySelectorAll('#modal input[type="checkbox"]:checked')
       .forEach(el => customItems.push(el.value));
+
+    if (customItems.length === 0 && !note) {
+      showError("Pilih minimal 1 isian custom ✨");
+      return;
+    }
   }
 
-  if (isCustomProduct && customItems.length === 0 && !note) {
-    showError("Untuk hampers custom, mohon pilih minimal 1 isian ✨");
-    return;
-  }
-
-  /* ===============================
-     SAVE TO FIRESTORE
-  ================================ */
   const orderData = {
     name,
     address,
     phone,
     product: selectedProduct.title,
-    price: selectedProduct.price,
-    desc: selectedProduct.desc,
+    price: Number(selectedProduct.price),
+    desc: selectedProduct.desc || "-",
     customItems,
     note: note || "-",
     status: "baru",
     createdAt: serverTimestamp()
   };
 
-  try {
-    await addDoc(collection(db, "orders"), orderData);
-  } catch (err) {
-    console.error(err);
-    showError("Gagal menyimpan order. Coba lagi 🙏");
-    return;
-  }
+  await addDoc(collection(db, "orders"), orderData);
 
   /* ===============================
-     WHATSAPP MESSAGE
+     WHATSAPP
   ================================ */
   const message = `
 Halo, saya mau pesan hampers 🎁
 
 Nama: ${name}
 Alamat: ${address}
-No WhatsApp: ${phone}
+No WA: ${phone}
 
 Produk: ${orderData.product}
-Harga: ${orderData.price}
-
-Isi Produk:
-${orderData.desc}
+Harga: Rp ${orderData.price.toLocaleString("id-ID")}
 
 Custom:
 ${customItems.join(", ") || "-"}
 
 Catatan:
 ${note || "-"}
-
-Mohon info ketersediaan & total harga 🙏
 `;
 
   window.open(
@@ -139,7 +180,7 @@ function showError(text) {
 }
 
 function hideError() {
-  if (formError) formError.style.display = "none";
+  formError.style.display = "none";
 }
 
 function resetForm() {
@@ -153,5 +194,3 @@ function resetForm() {
     .forEach(el => (el.checked = false));
 }
 
-// auto hide error ketika user mengetik
-document.addEventListener("input", hideError);
