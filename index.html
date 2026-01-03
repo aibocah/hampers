@@ -28,11 +28,10 @@
 
     <!-- ================= PRODUK ================= -->
 
-    <!-- Hampers Anyaman -->
     <div class="card product-card"
       onclick="openProduct(
         'Hampers Anyaman',
-        'Rp83.000',
+        '83000',
         'Fanta 1L, Gula Rose Brand 1kg, Teh Celup, Kopi Hitam, Roma Kelapa',
         false
       )">
@@ -41,11 +40,10 @@
       <p class="price">Rp83.000</p>
     </div>
 
-    <!-- Hampers Paket 3 -->
     <div class="card product-card"
       onclick="openProduct(
         'Hampers Paket 3',
-        'Rp75.000',
+        '75000',
         'Sirup ABC Orange, Kopi Kapal Api, Gula Rose Brand 1kg, Kokola Majo, Astor 2, Nabati Big Rolls',
         false
       )">
@@ -54,11 +52,10 @@
       <p class="price">Rp75.000</p>
     </div>
 
-    <!-- Hampers Paket 2 -->
     <div class="card product-card"
       onclick="openProduct(
         'Hampers Paket 2',
-        'Rp60.000',
+        '60000',
         'Teh Botol Sosro 1L, Biskotto Potato, Kokola Majo, Nextar, Mie Tasty Bakmi Ayam',
         false
       )">
@@ -67,11 +64,10 @@
       <p class="price">Rp60.000</p>
     </div>
 
-    <!-- Hampers Paket 1 -->
     <div class="card product-card"
       onclick="openProduct(
         'Hampers Paket 1',
-        'Rp50.000',
+        '50000',
         'Teh Celup, Gula Seribu Bintang 450gr, Hatari See Hong Puff, Mie Tasty Ayam Geprek',
         false
       )">
@@ -80,16 +76,15 @@
       <p class="price">Rp50.000</p>
     </div>
 
-    <!-- Hampers Custom -->
     <div class="card product-card"
       onclick="openProduct(
         'Hampers Custom (Isi Bebas)',
-        'Harga Menyesuaikan',
+        'custom',
         'Isi bebas sesuai kebutuhan & budget',
         true
       )">
       <img src="assets/images/hampers-custom.jpg" alt="Hampers Custom">
-      <h3>Hampers Custom (Isi Bebas)</h3>
+      <h3>Hampers Custom</h3>
       <p class="price">Harga Menyesuaikan</p>
     </div>
 
@@ -97,10 +92,10 @@
     <div class="card info-card">
       <h3>Saran Produk</h3>
       <ul>
-        <li>✔ Cocok untuk keluarga → Hampers Anyaman</li>
+        <li>✔ Untuk keluarga → Hampers Anyaman</li>
         <li>✔ Untuk teman → Hampers Paket 1</li>
         <li>✔ Budget hemat → Hampers Paket 2</li>
-        <li>✔ Sesuai keinginan → Hampers Custom</li>
+        <li>✔ Isi bebas → Hampers Custom</li>
       </ul>
     </div>
 
@@ -115,7 +110,7 @@
       <p><b>Harga:</b> <span id="modalPrice"></span></p>
       <p id="modalDesc"></p>
 
-      <!-- Custom Section -->
+      <!-- Custom -->
       <div id="customSection" style="display:none">
         <hr>
         <h4>Custom Isian</h4>
@@ -135,7 +130,7 @@
 
       <hr>
 
-      <!-- Data Pembeli -->
+      <!-- Buyer -->
       <h4>Data Pembeli</h4>
       <input id="buyerName" placeholder="Nama Lengkap">
       <input id="buyerAddress" placeholder="Alamat Pengiriman">
@@ -143,14 +138,13 @@
 
       <div id="formError"></div>
 
-      <button onclick="orderFromModal()">
-        Pesan via WhatsApp
-      </button>
+      <button onclick="orderFromModal()">Pesan via WhatsApp</button>
     </div>
   </div>
 
-  <!-- JS -->
-  <script src="assets/js/modal.js"></script>
+  <!-- JS (WAJIB MODULE UNTUK FIREBASE) -->
+  <script type="module" src="assets/js/firebase.js"></script>
+  <script type="module" src="assets/js/modal.js"></script>
 
 </body>
 </html>
