@@ -1,12 +1,68 @@
 /* ==================================================
-   ADMIN EDITOR (LOCALSTORAGE)
+   ADMIN.JS — FINAL (LOGIN + CRUD + EXPORT JSON)
 ================================================== */
 
-const form = document.getElementById("productForm");
-const list = document.getElementById("productList");
+/* ===============================
+   CONFIG LOGIN
+================================ */
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "12345";
 
 /* ===============================
-   LOAD & SAVE
+   ELEMENT
+================================ */
+const loginBox = document.getElementById("loginBox");
+const adminPanel = document.getElementById("adminPanel");
+const loginError = document.getElementById("loginError");
+
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+
+const productList = document.getElementById("productList");
+
+const titleInput = document.getElementById("pTitle");
+const priceInput = document.getElementById("pPrice");
+const descInput = document.getElementById("pDesc");
+const imageInput = document.getElementById("pImage");
+const customInput = document.getElementById("pCustom");
+
+/* ===============================
+   STATE
+================================ */
+let editIndex = null;
+
+/* ===============================
+   LOGIN
+================================ */
+function login() {
+  if (
+    usernameInput.value === ADMIN_USER &&
+    passwordInput.value === ADMIN_PASS
+  ) {
+    localStorage.setItem("adminLogin", "true");
+    showAdmin();
+  } else {
+    loginError.textContent = "Username atau password salah";
+  }
+}
+
+function logout() {
+  localStorage.removeItem("adminLogin");
+  location.reload();
+}
+
+function showAdmin() {
+  loginBox.style.display = "none";
+  adminPanel.style.display = "block";
+  renderProducts();
+}
+
+if (localStorage.getItem("adminLogin")) {
+  showAdmin();
+}
+
+/* ===============================
+   STORAGE
 ================================ */
 function getProducts() {
   return JSON.parse(localStorage.getItem("products")) || [];
@@ -17,70 +73,106 @@ function saveProducts(data) {
 }
 
 /* ===============================
-   RENDER
+   CRUD PRODUK
 ================================ */
+function saveProduct() {
+  if (!titleInput.value || !imageInput.value) {
+    alert("Nama produk & gambar wajib diisi");
+    return;
+  }
+
+  const product = {
+    title: titleInput.value,
+    price: priceInput.value ? Number(priceInput.value) : null,
+    desc: descInput.value,
+    image: imageInput.value,
+    custom: customInput.checked
+  };
+
+  const products = getProducts();
+
+  if (editIndex !== null) {
+    products[editIndex] = product;
+    editIndex = null;
+  } else {
+    products.push(product);
+  }
+
+  saveProducts(products);
+  resetForm();
+  renderProducts();
+}
+
 function renderProducts() {
   const products = getProducts();
-  list.innerHTML = "";
+  productList.innerHTML = "";
 
   if (products.length === 0) {
-    list.innerHTML = "<p>Belum ada produk</p>";
+    productList.innerHTML = "<p>Belum ada produk</p>";
     return;
   }
 
   products.forEach((p, i) => {
-    list.innerHTML += `
-      <div class="card">
+    productList.innerHTML += `
+      <div class="product-item">
         <img src="${p.image}">
-        <input value="${p.title}" onchange="update(${i}, 'title', this.value)">
-        <input type="number" value="${p.price || ''}" onchange="update(${i}, 'price', this.value)">
-        <textarea onchange="update(${i}, 'desc', this.value)">${p.desc}</textarea>
-        <input value="${p.image}" onchange="update(${i}, 'image', this.value)">
-        
-        <label>
-          <input type="checkbox" ${p.custom ? "checked" : ""} 
-          onchange="update(${i}, 'custom', this.checked)">
-          Custom
-        </label>
+        <strong>${p.title}</strong>
+        <p>
+          ${
+            p.price
+              ? "Rp " + p.price.toLocaleString("id-ID")
+              : "Harga Menyesuaikan"
+          }
+        </p>
+        <small>${p.custom ? "Custom" : "Normal"}</small>
 
-        <button onclick="remove(${i})" style="background:#dc2626">Hapus</button>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button onclick="editProduct(${i})">✏️ Edit</button>
+          <button class="danger" onclick="deleteProduct(${i})">🗑️ Hapus</button>
+        </div>
       </div>
     `;
   });
 }
 
+function editProduct(index) {
+  const product = getProducts()[index];
+
+  titleInput.value = product.title;
+  priceInput.value = product.price || "";
+  descInput.value = product.desc;
+  imageInput.value = product.image;
+  customInput.checked = product.custom;
+
+  editIndex = index;
+}
+
+function deleteProduct(index) {
+  if (!confirm("Yakin hapus produk ini?")) return;
+
+  const products = getProducts();
+  products.splice(index, 1);
+  saveProducts(products);
+  renderProducts();
+}
+
+function resetForm() {
+  titleInput.value = "";
+  priceInput.value = "";
+  descInput.value = "";
+  imageInput.value = "";
+  customInput.checked = false;
+}
+
 /* ===============================
-   CRUD
+   EXPORT JSON
 ================================ */
-form.onsubmit = e => {
-  e.preventDefault();
+function exportJSON() {
+  const data = JSON.stringify(getProducts(), null, 2);
+  const blob = new Blob([data], { type: "application/json" });
 
-  const products = getProducts();
-  products.push({
-    title: title.value,
-    price: price.value ? Number(price.value) : null,
-    desc: desc.value,
-    image: image.value,
-    custom: custom.checked
-  });
-
-  saveProducts(products);
-  form.reset();
-  renderProducts();
-};
-
-window.update = (i, key, val) => {
-  const products = getProducts();
-  products[i][key] = key === "price" && val ? Number(val) : val;
-  saveProducts(products);
-};
-
-window.remove = i => {
-  if (!confirm("Hapus produk?")) return;
-  const products = getProducts();
-  products.splice(i, 1);
-  saveProducts(products);
-  renderProducts();
-};
-
-renderProducts();
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "products.json";
+  a.click();
+}
