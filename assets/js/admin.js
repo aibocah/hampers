@@ -44,15 +44,20 @@ async function saveProduct() {
   const name = document.getElementById("name").value.trim();
   const price = Number(document.getElementById("price").value);
   const description = document.getElementById("description").value.trim();
-  const file = image.files[0];
+  const files = image.files;
 
   if (!name || !price || !description) {
     alert("Lengkapi data produk");
     return;
   }
 
-  let imageData = "";
-  if (file) imageData = await toBase64(file);
+  let images = [];
+
+  if (files.length > 0) {
+    for (const file of files) {
+      images.push(await toBase64(file));
+    }
+  }
 
   if (id) {
     const i = products.findIndex(p => p.id == id);
@@ -61,7 +66,7 @@ async function saveProduct() {
       name,
       price,
       description,
-      image: imageData || products[i].image
+      images: images.length ? images : products[i].images
     };
   } else {
     products.push({
@@ -69,7 +74,7 @@ async function saveProduct() {
       name,
       price,
       description,
-      image: imageData
+      images
     });
   }
 
@@ -77,6 +82,7 @@ async function saveProduct() {
   resetForm();
   renderProducts();
 }
+
 
 /* ================= RENDER ================= */
 function renderProducts() {
