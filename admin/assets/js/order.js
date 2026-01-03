@@ -1,20 +1,10 @@
 /* ==================================================
-   ORDER.JS — FINAL (RENDER PRODUK AKTIF DARI ADMIN)
+   ORDER.JS — FINAL (JSON + WHATSAPP)
 ================================================== */
 
-import { db } from "./firebase.js";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  serverTimestamp,
-  query,
-  where
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-/* ELEMENT */
-const productList = document.getElementById("productList");
-
+/* ===============================
+   ELEMENT
+================================ */
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const modalPrice = document.getElementById("modalPrice");
@@ -27,71 +17,41 @@ const buyerPhone = document.getElementById("buyerPhone");
 const customText = document.getElementById("customText");
 const formError = document.getElementById("formError");
 
+/* ===============================
+   STATE
+================================ */
 let selectedProduct = null;
 
 /* ===============================
-   LOAD PRODUK AKTIF
+   OPEN PRODUCT (DARI products.js)
 ================================ */
-async function loadProducts() {
-  productList.innerHTML = "⏳ Memuat produk...";
-
-  const q = query(
-    collection(db, "products"),
-    where("active", "==", true)
-  );
-
-  const snapshot = await getDocs(q);
-  productList.innerHTML = "";
-
-  if (snapshot.empty) {
-    productList.innerHTML = "❌ Belum ada produk aktif";
-    return;
-  }
-
-  snapshot.forEach(docSnap => {
-    const p = docSnap.data();
-
-    const card = document.createElement("div");
-    card.className = "card product-card";
-    card.innerHTML = `
-      <img src="${p.image}" alt="${p.title}">
-      <h3>${p.title}</h3>
-      <p class="price">Rp ${Number(p.price).toLocaleString("id-ID")}</p>
-    `;
-
-    card.onclick = () => openProduct(p);
-    productList.appendChild(card);
-  });
-}
-
-loadProducts();
-
-/* ===============================
-   MODAL
-================================ */
-window.openProduct = function (product) {
+function openProduct(product) {
   selectedProduct = product;
 
   modalTitle.textContent = product.title;
-  modalPrice.textContent =
-    "Rp " + Number(product.price).toLocaleString("id-ID");
-  modalDesc.textContent = product.desc || "";
+  modalPrice.textContent = product.price
+    ? "Rp " + product.price.toLocaleString("id-ID")
+    : "Harga Menyesuaikan";
+  modalDesc.textContent = product.desc || "-";
 
   customSection.style.display = product.custom ? "block" : "none";
 
   resetForm();
   hideError();
   modal.style.display = "flex";
-};
-
-window.closeModal = function () {
-  modal.style.display = "none";
-};
+}
 
 /* ===============================
-   SUBMIT ORDER
+   CLOSE MODAL
 ================================ */
-window.orderFromModal = async function () {
+function closeModal() {
+  modal.style.display = "none";
+}
+
+/* ===============================
+   SUBMIT ORDER (WA ONLY)
+================================ */
+function orderFromModal() {
   hideError();
 
   const name = buyerName.value.trim();
@@ -99,11 +59,12 @@ window.orderFromModal = async function () {
   const phone = buyerPhone.value.trim();
   const note = customText.value.trim();
 
-  if (!name || !address || !phone) {
-    showError("Nama, alamat, dan WhatsApp wajib diisi 🙏");
+  if (!name || !phone) {
+    showError("Nama dan nomor WhatsApp wajib diisi 🙏");
     return;
   }
 
+  /* custom items */
   let customItems = [];
   if (selectedProduct.custom) {
     document
@@ -116,28 +77,21 @@ window.orderFromModal = async function () {
     }
   }
 
-  await addDoc(collection(db, "orders"), {
-    name,
-    address,
-    phone,
-    product: selectedProduct.title,
-    price: Number(selectedProduct.price),
-    desc: selectedProduct.desc || "-",
-    customItems,
-    note: note || "-",
-    status: "baru",
-    createdAt: serverTimestamp()
-  });
-
-  const message = `
+  const pesan = `
 Halo, saya mau pesan hampers 🎁
 
 Nama: ${name}
-Alamat: ${address}
-No WA: ${phone}
+Alamat: ${address || "-"}
 
 Produk: ${selectedProduct.title}
-Harga: Rp ${Number(selectedProduct.price).toLocaleString("id-ID")}
+Harga: ${
+    selectedProduct.price
+      ? "Rp " + selectedProduct.price.toLocaleString("id-ID")
+      : "Menyesuaikan"
+  }
+
+Isi:
+${selectedProduct.desc || "-"}
 
 Custom:
 ${customItems.join(", ") || "-"}
@@ -148,12 +102,12 @@ ${note || "-"}
 
   window.open(
     "https://wa.me/62895339847320?text=" +
-      encodeURIComponent(message),
+      encodeURIComponent(pesan),
     "_blank"
   );
 
   closeModal();
-};
+}
 
 /* ===============================
    UI HELPERS
@@ -164,7 +118,7 @@ function showError(text) {
 }
 
 function hideError() {
-  formError.style.display = "none";
+  if (formError) formError.style.display = "none";
 }
 
 function resetForm() {
@@ -177,3 +131,6 @@ function resetForm() {
     .querySelectorAll('#modal input[type="checkbox"]')
     .forEach(el => (el.checked = false));
 }
+
+/* auto hide error */
+document.addEventListener("input", hideError);
