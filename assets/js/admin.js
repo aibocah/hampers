@@ -1,19 +1,18 @@
-// LOGIN CONFIG
-const ADMIN_USER = "Septi";
-const ADMIN_PASS = "cintaneanwar";
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "12345";
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-// LOGIN
+/* ================= LOGIN ================= */
 function login() {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
+  const u = username.value;
+  const p = password.value;
 
   if (u === ADMIN_USER && p === ADMIN_PASS) {
-    localStorage.setItem("adminLogin", "true");
+    localStorage.setItem("adminLogin", "1");
     showAdmin();
   } else {
-    alert("Login gagal");
+    alert("Login salah");
   }
 }
 
@@ -23,15 +22,15 @@ function logout() {
 }
 
 function showAdmin() {
-  document.getElementById("loginBox").classList.add("hidden");
-  document.getElementById("adminPanel").classList.remove("hidden");
+  loginBox.classList.add("hidden");
+  adminPanel.classList.remove("hidden");
   renderProducts();
 }
 
 if (localStorage.getItem("adminLogin")) showAdmin();
 
-// IMAGE TO BASE64
-function getImageBase64(file) {
+/* ================= IMAGE ================= */
+function toBase64(file) {
   return new Promise(resolve => {
     const reader = new FileReader();
     reader.onload = e => resolve(e.target.result);
@@ -39,28 +38,38 @@ function getImageBase64(file) {
   });
 }
 
-// SAVE PRODUCT
+/* ================= SAVE ================= */
 async function saveProduct() {
-  const id = document.getElementById("productId").value;
-  const name = document.getElementById("name").value;
-  const price = document.getElementById("price").value;
-  const desc = document.getElementById("description").value;
-  const imgFile = document.getElementById("image").files[0];
+  const id = productId.value;
+  const name = document.getElementById("name").value.trim();
+  const price = Number(document.getElementById("price").value);
+  const description = document.getElementById("description").value.trim();
+  const file = image.files[0];
 
-  let image = "";
+  if (!name || !price || !description) {
+    alert("Lengkapi data produk");
+    return;
+  }
 
-  if (imgFile) image = await getImageBase64(imgFile);
+  let imageData = "";
+  if (file) imageData = await toBase64(file);
 
   if (id) {
     const i = products.findIndex(p => p.id == id);
-    products[i] = { ...products[i], name, price, description: desc, image };
+    products[i] = {
+      ...products[i],
+      name,
+      price,
+      description,
+      image: imageData || products[i].image
+    };
   } else {
     products.push({
       id: Date.now(),
       name,
       price,
-      description: desc,
-      image
+      description,
+      image: imageData
     });
   }
 
@@ -69,31 +78,37 @@ async function saveProduct() {
   renderProducts();
 }
 
-// RENDER
+/* ================= RENDER ================= */
 function renderProducts() {
-  const list = document.getElementById("productList");
-  list.innerHTML = "";
+  productList.innerHTML = "";
+
+  if (products.length === 0) {
+    productList.innerHTML = "<p>Belum ada produk</p>";
+    return;
+  }
 
   products.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
+
     div.innerHTML = `
       <div>
         <b>${p.name}</b><br>
-        Rp ${p.price}<br>
+        Rp ${p.price.toLocaleString("id-ID")}<br>
         <small>${p.description}</small>
       </div>
       <div>
-        <img src="${p.image}">
-        <br>
+        <img src="${p.image}" style="max-width:80px"><br>
         <button onclick="editProduct(${p.id})">Edit</button>
         <button onclick="deleteProduct(${p.id})" style="background:red">Hapus</button>
       </div>
     `;
-    list.appendChild(div);
+
+    productList.appendChild(div);
   });
 }
 
+/* ================= EDIT ================= */
 function editProduct(id) {
   const p = products.find(p => p.id === id);
   productId.value = p.id;
@@ -102,13 +117,15 @@ function editProduct(id) {
   description.value = p.description;
 }
 
+/* ================= DELETE ================= */
 function deleteProduct(id) {
-  if (!confirm("Hapus produk?")) return;
+  if (!confirm("Hapus produk ini?")) return;
   products = products.filter(p => p.id !== id);
   localStorage.setItem("products", JSON.stringify(products));
   renderProducts();
 }
 
+/* ================= UTIL ================= */
 function resetForm() {
   productId.value = "";
   name.value = "";
@@ -117,7 +134,7 @@ function resetForm() {
   image.value = "";
 }
 
-// EXPORT JSON
+/* ================= EXPORT ================= */
 function exportJSON() {
   const blob = new Blob(
     [JSON.stringify(products, null, 2)],
@@ -129,3 +146,4 @@ function exportJSON() {
   a.download = "products.json";
   a.click();
 }
+
