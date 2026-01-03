@@ -1,27 +1,16 @@
-/* ==================================================
-   MODAL.JS — FINAL
-================================================== */
+let selectedProduct = null;
 
-const modal = document.getElementById("modal");
-const modalTitle = document.getElementById("modalTitle");
-const modalPrice = document.getElementById("modalPrice");
-const modalDesc = document.getElementById("modalDesc");
-const customSection = document.getElementById("customSection");
+function openModal(product) {
+  selectedProduct = product;
 
-function openProduct(product) {
-  window.selectedProduct = product;
+  document.getElementById("modalTitle").innerText = product.name;
+  document.getElementById("modalPrice").innerText =
+    "Rp " + Number(product.price).toLocaleString("id-ID");
+  document.getElementById("modalDesc").innerText = product.description;
 
-  modalTitle.textContent = product.title;
-  modalPrice.textContent = product.price
-    ? "Rp " + product.price.toLocaleString("id-ID")
-    : "Harga Menyesuaikan";
-  modalDesc.textContent = product.desc || "-";
-
-  customSection.style.display = product.custom ? "block" : "none";
-  modal.style.display = "flex";
+  document.getElementById("modal").style.display = "flex";
 }
 
 function closeModal() {
-  modal.style.display = "none";
+  document.getElementById("modal").style.display = "none";
 }
-
