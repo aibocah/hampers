@@ -2,38 +2,97 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
+  <title>Admin Dashboard | Hampers</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- GLOBAL STYLE -->
   <link rel="stylesheet" href="../assets/css/style.css">
+
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    th {
+      background: #f0fdf4;
+      color: #065f46;
+    }
+    select {
+      padding: 6px;
+      border-radius: 8px;
+    }
+    .stats {
+      display: flex;
+      gap: 12px;
+      margin: 12px 0;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1;
+      background: #ffffff;
+      padding: 14px;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.08);
+      text-align: center;
+    }
+  </style>
 </head>
 
-<body onload="checkAuth()">
+<body>
 
   <div class="container">
-    <h2>📊 Admin Dashboard</h2>
 
-    <button onclick="logout()">Logout</button>
+    <!-- HEADER -->
+    <h2>📊 Admin Dashboard</h2>
+    <p>Manajemen order hampers lebaran</p>
+
+    <button onclick="logout()">🚪 Logout</button>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card">
+        <h4>Total Order</h4>
+        <strong id="totalOrder">0</strong>
+      </div>
+      <div class="stat-card">
+        <h4>Total Omzet</h4>
+        <strong id="totalOmzet">Rp 0</strong>
+      </div>
+    </div>
 
     <hr>
 
+    <!-- TABLE -->
     <h3>📦 List Order</h3>
 
-    <table width="100%" border="1" cellpadding="8" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Tanggal</th>
-          <th>Produk</th>
-          <th>Nama</th>
-          <th>Alamat</th>
-          <th>WA</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="orderList"></tbody>
-    </table>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Produk</th>
+            <th>Harga</th>
+            <th>WA</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="orderList"></tbody>
+      </table>
+    </div>
+
   </div>
 
-  <script src="../assets/js/auth.js"></script>
-  <script src="../assets/js/dashboard.js"></script>
+  <!-- FIREBASE & MODULE JS -->
+  <script type="module" src="../assets/js/firebase.js"></script>
+  <script type="module" src="../assets/js/admin-dashboard.js"></script>
+  <script type="module" src="../assets/js/auth.js"></script>
+
 </body>
 </html>
