@@ -5,9 +5,9 @@
   <title>Hampers Lebaran</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/modal.css">
+  <!-- CSS (ambil dari admin/css) -->
+  <link rel="stylesheet" href="admin/css/style.css">
+  <link rel="stylesheet" href="admin/css/modal.css">
 </head>
 
 <body>
@@ -35,7 +35,7 @@
         'Fanta 1L, Gula Rose Brand 1kg, Teh Celup, Kopi Hitam, Roma Kelapa',
         false
       )">
-      <img src="assets/images/hampers-1.jpg" alt="Hampers Anyaman">
+      <img src="admin/img/hampers/hampers-1.jpg" alt="Hampers Anyaman">
       <h3>Hampers Anyaman</h3>
       <p class="price">Rp83.000</p>
     </div>
@@ -47,7 +47,7 @@
         'Sirup ABC Orange, Kopi Kapal Api, Gula Rose Brand 1kg, Kokola Majo, Astor 2, Nabati Big Rolls',
         false
       )">
-      <img src="assets/images/hampers-4.jpg" alt="Hampers Paket 3">
+      <img src="admin/img/hampers/hampers-4.jpg" alt="Hampers Paket 3">
       <h3>Hampers Paket 3</h3>
       <p class="price">Rp75.000</p>
     </div>
@@ -59,7 +59,7 @@
         'Teh Botol Sosro 1L, Biskotto Potato, Kokola Majo, Nextar, Mie Tasty Bakmi Ayam',
         false
       )">
-      <img src="assets/images/hampers-2.jpg" alt="Hampers Paket 2">
+      <img src="admin/img/hampers/hampers-2.jpg" alt="Hampers Paket 2">
       <h3>Hampers Paket 2</h3>
       <p class="price">Rp60.000</p>
     </div>
@@ -71,7 +71,7 @@
         'Teh Celup, Gula Seribu Bintang 450gr, Hatari See Hong Puff, Mie Tasty Ayam Geprek',
         false
       )">
-      <img src="assets/images/hampers-3.jpg" alt="Hampers Paket 1">
+      <img src="admin/img/hampers/hampers-3.jpg" alt="Hampers Paket 1">
       <h3>Hampers Paket 1</h3>
       <p class="price">Rp50.000</p>
     </div>
@@ -83,7 +83,7 @@
         'Isi bebas sesuai kebutuhan & budget',
         true
       )">
-      <img src="assets/images/hampers-custom.jpg" alt="Hampers Custom">
+      <img src="admin/img/hampers/hampers-custom.jpg" alt="Hampers Custom">
       <h3>Hampers Custom</h3>
       <p class="price">Harga Menyesuaikan</p>
     </div>
@@ -110,7 +110,6 @@
       <p><b>Harga:</b> <span id="modalPrice"></span></p>
       <p id="modalDesc"></p>
 
-      <!-- Custom -->
       <div id="customSection" style="display:none">
         <hr>
         <h4>Custom Isian</h4>
@@ -130,22 +129,18 @@
 
       <hr>
 
-      <!-- Buyer -->
       <h4>Data Pembeli</h4>
       <input id="buyerName" placeholder="Nama Lengkap">
       <input id="buyerAddress" placeholder="Alamat Pengiriman">
       <input id="buyerPhone" placeholder="No WhatsApp">
 
-      <div id="formError"></div>
-
       <button onclick="orderFromModal()">Pesan via WhatsApp</button>
     </div>
   </div>
 
-  <!-- JS (WAJIB MODULE UNTUK FIREBASE) -->
-  <script type="module" src="assets/js/firebase.js"></script>
-  <script type="module" src="assets/js/modal.js"></script>
+  <!-- JS -->
+  <script type="module" src="admin/assets/js/firebase.js"></script>
+  <script src="admin/assets/js/modal.js"></script>
 
 </body>
 </html>
-
