@@ -7,9 +7,11 @@ function orderFromModal() {
 
   const error = document.getElementById("formError");
   error.innerText = "";
+  error.style.display = "none";
 
   if (!name || !address || !phone) {
     error.innerText = "⚠️ Lengkapi semua data";
+    error.style.display = "block";
     return;
   }
 
