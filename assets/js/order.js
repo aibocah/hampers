@@ -1,71 +1,35 @@
-/* ==================================================
-   ORDER.JS — FINAL (WHATSAPP)
-================================================== */
-
-const buyerName = document.getElementById("buyerName");
-const buyerAddress = document.getElementById("buyerAddress");
-const buyerPhone = document.getElementById("buyerPhone");
-const customText = document.getElementById("customText");
-const formError = document.getElementById("formError");
-
 function orderFromModal() {
-  formError.style.display = "none";
+  if (!selectedProduct) return;
 
-  const name = buyerName.value.trim();
-  const address = buyerAddress.value.trim();
-  const phone = buyerPhone.value.trim();
-  const note = customText.value.trim();
-  const product = window.selectedProduct;
+  const name = document.getElementById("buyerName").value.trim();
+  const address = document.getElementById("buyerAddress").value.trim();
+  const phone = document.getElementById("buyerPhone").value.trim();
 
-  if (!name || !phone) {
-    formError.textContent = "Nama & WhatsApp wajib diisi 🙏";
-    formError.style.display = "block";
+  const error = document.getElementById("formError");
+  error.innerText = "";
+
+  if (!name || !address || !phone) {
+    error.innerText = "⚠️ Lengkapi semua data";
     return;
   }
 
-  let customItems = [];
-  if (product.custom) {
-    document
-      .querySelectorAll('#modal input[type="checkbox"]:checked')
-      .forEach(el => customItems.push(el.value));
-
-    if (!customItems.length && !note) {
-      formError.textContent = "Pilih minimal 1 isian custom ✨";
-      formError.style.display = "block";
-      return;
-    }
-  }
-
   const message = `
-Halo, saya mau pesan hampers 🎁
+*PESAN HAMPERS LEBARAN*
+----------------------
+*Produk:* ${selectedProduct.name}
+*Harga:* Rp ${Number(selectedProduct.price).toLocaleString("id-ID")}
 
-Nama: ${name}
-Alamat: ${address || "-"}
-No WhatsApp: ${phone}
+*Nama:* ${name}
+*Alamat:* ${address}
+*No HP:* ${phone}
+  `;
 
-Produk: ${product.title}
-Harga: ${
-    product.price
-      ? "Rp " + product.price.toLocaleString("id-ID")
-      : "Menyesuaikan"
-  }
+  const whatsappNumber = "62895339847320"; // GANTI NOMOR KAMU
+  const url =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    encodeURIComponent(message);
 
-Isi:
-${product.desc || "-"}
-
-Custom:
-${customItems.join(", ") || "-"}
-
-Catatan:
-${note || "-"}
-`;
-
-  window.open(
-    "https://wa.me/62895339847320?text=" +
-      encodeURIComponent(message),
-    "_blank"
-  );
-
-  closeModal();
+  window.open(url, "_blank");
 }
-
