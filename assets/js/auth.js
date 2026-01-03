@@ -1,25 +1,52 @@
-const ADMIN_USER = "Septi";
-const ADMIN_PASS = "Cintaneanwar"; // GANTI SENDIRI
+/* ==================================================
+   AUTH.JS — FINAL VERSION (FIREBASE AUTH)
+   ================================================== */
 
-function login() {
-  const user = username.value;
-  const pass = password.value;
+import { auth } from "./firebase.js";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  if (user === ADMIN_USER && pass === ADMIN_PASS) {
-    localStorage.setItem("adminLogin", "true");
-    location.href = "dashboard.html";
-  } else {
-    loginError.innerText = "❌ Username atau password salah";
+/* ===============================
+   LOGIN
+================================ */
+window.login = async function () {
+  const email = username.value.trim();
+  const password = passwordInput.value.trim();
+
+  loginError.textContent = "";
+
+  if (!email || !password) {
+    loginError.textContent = "Email dan password wajib diisi";
+    return;
   }
-}
 
-function checkAuth() {
-  if (localStorage.getItem("adminLogin") !== "true") {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+  } catch (err) {
+    console.error(err);
+    loginError.textContent = "❌ Login gagal. Cek email atau password";
+  }
+};
+
+/* ===============================
+   CHECK AUTH (AUTO)
+================================ */
+onAuthStateChanged(auth, user => {
+  const isDashboard = location.pathname.includes("dashboard");
+
+  if (isDashboard && !user) {
     location.href = "login.html";
   }
-}
+});
 
-function logout() {
-  localStorage.removeItem("adminLogin");
-  location.href = "login.html";
-}
+/* ===============================
+   LOGOUT
+================================ */
+window.logout = async function () {
+  await signOut(auth);
+  window.location.href = "login.html";
+};
