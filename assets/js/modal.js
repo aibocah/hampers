@@ -1,17 +1,22 @@
 window.selectedProduct = null;
 
+const modalEl = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalPrice = document.getElementById("modalPrice");
+const modalDesc = document.getElementById("modalDesc");
+
 function openModal(product) {
   window.selectedProduct = product;
 
   modalTitle.innerText = product.name;
-  modalPrice.innerText = "Rp " + product.price.toLocaleString("id-ID");
+  modalPrice.innerText = "Rp " + Number(product.price).toLocaleString("id-ID");
   modalDesc.innerText = product.description;
 
   const slider = document.getElementById("modalSlider");
   slider.innerHTML = `
     <div class="swipe-container">
       <div class="swipe-track">
-        ${product.images.map(img =>
+        ${(product.images || []).map(img =>
           `<img src="${img}" onclick="zoomImage('${img}')">`
         ).join("")}
       </div>
@@ -19,17 +24,18 @@ function openModal(product) {
   `;
 
   initModalSwipe();
-  modal.style.display = "flex";
+  modalEl.style.display = "flex";
 }
 
 function closeModal() {
-  modal.style.display = "none";
+  modalEl.style.display = "none";
 }
 
 // ===== SWIPE MODAL =====
 function initModalSwipe() {
   const container = document.querySelector("#modalSlider .swipe-container");
   const track = document.querySelector("#modalSlider .swipe-track");
+  if (!container || !track) return;
   const images = track.querySelectorAll("img");
 
   if (images.length <= 1) return;
