@@ -5,8 +5,8 @@
 /* ===============================
    CONFIG LOGIN
 ================================ */
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "12345";
+const ADMIN_USER = "septi";
+const ADMIN_PASS = "cintaneanwar";
 
 /* ===============================
    ELEMENT
