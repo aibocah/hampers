@@ -53,4 +53,8 @@ function initSlider(card) {
     images[index].classList.add("active");
   }, 3000);
 }
+function zoomImage(src) {
+  zoomImg.src = src;
+  zoomModal.style.display = "flex";
+}
 
