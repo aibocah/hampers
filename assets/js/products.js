@@ -22,10 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
       card.className = "product-card";
 
       card.innerHTML = `
-        <div class="slider">
-          ${(p.images || []).map((img, i) =>
-            `<img src="${img}" class="${i === 0 ? "active" : ""}" onclick="zoomImage('${img}')">`
-          ).join("")}
+        <div class="swipe-container">
+          <div class="swipe-track">
+            ${(p.images || []).map(img =>
+              `<img src="${img}" onclick="zoomImage('${img}')">`
+            ).join("")}
+          </div>
         </div>
 
         <h3>${p.name}</h3>
@@ -36,25 +38,38 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       productList.appendChild(card);
-      initSlider(card);
+      initSwipe(card);
     });
   }
 });
 
-function initSlider(card) {
-  const images = card.querySelectorAll(".slider img");
-  let index = 0;
+// ===== SWIPE LOGIC =====
+function initSwipe(card) {
+  const container = card.querySelector(".swipe-container");
+  const track = card.querySelector(".swipe-track");
+  const images = track.querySelectorAll("img");
 
   if (images.length <= 1) return;
 
-  setInterval(() => {
-    images[index].classList.remove("active");
-    index = (index + 1) % images.length;
-    images[index].classList.add("active");
-  }, 3000);
-}
-function zoomImage(src) {
-  zoomImg.src = src;
-  zoomModal.style.display = "flex";
+  let index = 0;
+  let startX = 0;
+  let currentX = 0;
+
+  container.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+  });
+
+  container.addEventListener("touchmove", e => {
+    currentX = e.touches[0].clientX;
+  });
+
+  container.addEventListener("touchend", () => {
+    const diff = startX - currentX;
+
+    if (diff > 50 && index < images.length - 1) index++;
+    if (diff < -50 && index > 0) index--;
+
+    track.style.transform = `translateX(-${index * 100}%)`;
+  });
 }
 
