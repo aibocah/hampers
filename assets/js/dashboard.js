@@ -1,15 +1,20 @@
 /* ==================================================
    ADMIN DASHBOARD — FINAL VERSION
+   (ORDER + PRODUK)
    ================================================== */
 
-import { db } from "../assets/js/firebase.js";
+import { db } from "./firebase.js";
 import {
   collection,
   onSnapshot,
   query,
   orderBy,
+  addDoc,
+  getDocs,
   updateDoc,
-  doc
+  deleteDoc,
+  doc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===============================
@@ -19,15 +24,18 @@ const orderList = document.getElementById("orderList");
 const totalOrderEl = document.getElementById("totalOrder");
 const totalOmzetEl = document.getElementById("totalOmzet");
 
+const productForm = document.getElementById("productForm");
+const productList = document.getElementById("productList");
+
 /* ===============================
-   REALTIME LISTENER
+   ======= ORDER SECTION =========
 ================================ */
-const q = query(
+const orderQuery = query(
   collection(db, "orders"),
   orderBy("createdAt", "desc")
 );
 
-onSnapshot(q, snapshot => {
+onSnapshot(orderQuery, snapshot => {
   orderList.innerHTML = "";
 
   let totalOrder = snapshot.size;
@@ -36,7 +44,6 @@ onSnapshot(q, snapshot => {
   snapshot.forEach(docSnap => {
     const o = docSnap.data();
 
-    // hitung omzet (ambil angka saja)
     const priceNumber = parseInt(
       (o.price || "0").replace(/\D/g, "")
     );
@@ -65,10 +72,8 @@ onSnapshot(q, snapshot => {
     "Rp " + totalOmzet.toLocaleString("id-ID");
 });
 
-/* ===============================
-   UPDATE STATUS
-================================ */
-window.updateStatus = async function (id, status) {
+/* UPDATE STATUS ORDER */
+window.updateStatus = async (id, status) => {
   try {
     await updateDoc(doc(db, "orders", id), { status });
   } catch (err) {
@@ -76,3 +81,94 @@ window.updateStatus = async function (id, status) {
     alert("Gagal update status");
   }
 };
+
+/* ===============================
+   ======= PRODUCT SECTION =======
+================================ */
+
+/* TAMBAH PRODUK */
+productForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  try {
+    await addDoc(collection(db, "products"), {
+      title: title.value,
+      price: Number(price.value),
+      desc: desc.value,
+      image: image.value,
+      createdAt: serverTimestamp()
+    });
+
+    productForm.reset();
+    loadProducts();
+    alert("Produk berhasil ditambahkan 🤍");
+
+  } catch (err) {
+    console.error(err);
+    alert("Gagal menambahkan produk");
+  }
+});
+
+/* LOAD PRODUK */
+async function loadProducts() {
+  productList.innerHTML = "⏳ Loading produk...";
+
+  const snapshot = await getDocs(collection(db, "products"));
+  productList.innerHTML = "";
+
+  snapshot.forEach(docSnap => {
+    const p = docSnap.data();
+    const id = docSnap.id;
+
+    productList.innerHTML += `
+      <div class="product-item">
+        <img src="${p.image}">
+        <input value="${p.title}" id="title-${id}">
+        <input type="number" value="${p.price}" id="price-${id}">
+        <textarea id="desc-${id}">${p.desc || ""}</textarea>
+        <input value="${p.image}" id="image-${id}">
+
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button onclick="updateProduct('${id}')">💾 Update</button>
+          <button class="danger" onclick="deleteProduct('${id}')">🗑️ Hapus</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* UPDATE PRODUK */
+window.updateProduct = async (id) => {
+  try {
+    await updateDoc(doc(db, "products", id), {
+      title: document.getElementById(`title-${id}`).value,
+      price: Number(document.getElementById(`price-${id}`).value),
+      desc: document.getElementById(`desc-${id}`).value,
+      image: document.getElementById(`image-${id}`).value
+    });
+
+    alert("Produk berhasil diupdate ✨");
+
+  } catch (err) {
+    console.error(err);
+    alert("Gagal update produk");
+  }
+};
+
+/* HAPUS PRODUK */
+window.deleteProduct = async (id) => {
+  if (!confirm("Yakin hapus produk ini?")) return;
+
+  try {
+    await deleteDoc(doc(db, "products", id));
+    loadProducts();
+    alert("Produk berhasil dihapus 🗑️");
+
+  } catch (err) {
+    console.error(err);
+    alert("Gagal hapus produk");
+  }
+};
+
+/* INIT */
+loadProducts();
