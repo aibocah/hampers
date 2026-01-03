@@ -1,47 +1,39 @@
-const productList = document.getElementById("product-list");
+document.addEventListener("DOMContentLoaded", () => {
+  const productList = document.getElementById("product-list");
 
-// Ambil produk (dari localStorage, fallback ke products.json)
-async function getProducts() {
-  let products = JSON.parse(localStorage.getItem("products"));
+  let products = JSON.parse(localStorage.getItem("products")) || [];
 
-  if (!products || products.length === 0) {
-    try {
-      const res = await fetch("products.json");
-      products = await res.json();
-      localStorage.setItem("products", JSON.stringify(products));
-    } catch (error) {
-      console.error("Gagal load products.json", error);
-      products = [];
-    }
-  }
-
-  return products;
-}
-
-// Render produk ke halaman index
-async function renderProducts() {
-  const products = await getProducts();
-  productList.innerHTML = "";
-
+  // fallback kalau localStorage kosong
   if (products.length === 0) {
-    productList.innerHTML = "<p>Produk belum tersedia</p>";
-    return;
+    fetch("products.json")
+      .then(res => res.json())
+      .then(data => {
+        products = data;
+        localStorage.setItem("products", JSON.stringify(products));
+        renderProducts(products);
+      })
+      .catch(() => {
+        productList.innerHTML = "<p>Produk belum tersedia</p>";
+      });
+  } else {
+    renderProducts(products);
   }
 
-  products.forEach(product => {
-    const card = document.createElement("div");
-    card.className = "product-card";
+  function renderProducts(products) {
+    productList.innerHTML = "";
 
-    card.innerHTML = `
-      <img src="${product.image}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p>${product.description}</p>
-      <span>Rp ${product.price}</span>
-    `;
+    products.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "product-card";
 
-    productList.appendChild(card);
-  });
-}
+      div.innerHTML = `
+        <img src="${p.image}" style="max-width:150px">
+        <h3>${p.name}</h3>
+        <p>${p.description}</p>
+        <strong>Rp ${p.price}</strong>
+      `;
 
-// Jalankan saat halaman dibuka
-renderProducts();
+      productList.appendChild(div);
+    });
+  }
+});
