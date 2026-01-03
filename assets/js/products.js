@@ -1,78 +1,53 @@
-
 /* ==================================================
-   PRODUCTS DATA (JSON LOCAL)
-================================================== */
-
-const products = [
-  {
-    "id": 1,
-    "title": "Hampers Anyaman",
-    "price": 83000,
-    "desc": "Fanta 1L, Gula Rose Brand 1kg, Teh Celup, Kopi Hitam, Roma Kelapa",
-    "image": "assets/img/hampers/hampers-1.jpg",
-    "custom": false,
-    "active": true
-  },
-  {
-    "id": 2,
-    "title": "Hampers Paket 3",
-    "price": 75000,
-    "desc": "Sirup ABC Orange, Kopi Kapal Api, Gula Rose Brand 1kg, Kokola Majo, Astor 2, Nabati Big Rolls",
-    "image": "assets/img/hampers/hampers-4.jpg",
-    "custom": false,
-    "active": true
-  },
-  {
-    "id": 3,
-    "title": "Hampers Paket 2",
-    "price": 60000,
-    "desc": "Teh Botol Sosro 1L, Biskotto Potato, Kokola Majo, Nextar, Mie Tasty Bakmi Ayam",
-    "image": "assets/img/hampers/hampers-2.jpg",
-    "custom": false,
-    "active": true
-  },
-    {
-    "id": 4,
-    "title": "Hampers Paket 1",
-    "price": 50000,
-    "desc": "Teh Celup, Gula Seribu Bintang 450 gr, Hatari See Hong Puff, Mie Tasty Ayam Geprek",
-    "image": "assets/img/hampers/hampers-3.jpg",
-    "custom": false,
-    "active": true
-    },
-  {
-    "id": 5,
-    "title": "Hampers Custom (Isi Bebas)",
-    "price": 0,
-    "desc": "Isi bebas sesuai kebutuhan & budget",
-    "image": "assets/img/hampers/hampers-custom.jpg",
-    "custom": true,
-    "active": true
-  }
-]
-
-/* ==================================================
-   RENDER PRODUK
+   PRODUCTS.JS — FINAL (LOCALSTORAGE)
+   Render produk dari admin editor
 ================================================== */
 
 const productList = document.getElementById("productList");
 
-products.forEach(product => {
-  const card = document.createElement("div");
-  card.className = "card product-card";
+/* ===============================
+   AMBIL DATA
+================================ */
+function getProducts() {
+  return JSON.parse(localStorage.getItem("products")) || [];
+}
 
-  card.innerHTML = `
-    <img src="${product.image}" alt="${product.title}">
-    <h3>${product.title}</h3>
-    <p class="price">
-      ${
-        product.price
-          ? "Rp " + product.price.toLocaleString("id-ID")
-          : "Harga Menyesuaikan"
-      }
-    </p>
-  `;
+/* ===============================
+   RENDER PRODUK
+================================ */
+function renderProducts() {
+  const products = getProducts();
+  productList.innerHTML = "";
 
-  card.onclick = () => openProduct(product);
-  productList.appendChild(card);
-});
+  if (products.length === 0) {
+    productList.innerHTML =
+      "<p style='text-align:center;color:#666'>Belum ada produk</p>";
+    return;
+  }
+
+  products.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "card product-card";
+
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.title}">
+      <h3>${product.title}</h3>
+      <p class="price">
+        ${
+          product.price
+            ? "Rp " + product.price.toLocaleString("id-ID")
+            : "Harga Menyesuaikan"
+        }
+      </p>
+    `;
+
+    card.onclick = () => openProduct(product);
+    productList.appendChild(card);
+  });
+}
+
+/* ===============================
+   INIT
+================================ */
+document.addEventListener("DOMContentLoaded", renderProducts);
+
