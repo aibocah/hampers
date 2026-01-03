@@ -1,6 +1,6 @@
 /* ==================================================
    AUTH.JS — FINAL VERSION (FIREBASE AUTH)
-   ================================================== */
+================================================== */
 
 import { auth } from "./firebase.js";
 import {
@@ -13,8 +13,9 @@ import {
    LOGIN
 ================================ */
 window.login = async function () {
-  const email = username.value.trim();
-  const password = passwordInput.value.trim();
+  const email = document.getElementById("username").value.trim();
+  const password = document.getElementById("passwordInput").value.trim();
+  const loginError = document.getElementById("loginError");
 
   loginError.textContent = "";
 
