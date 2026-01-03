@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -8,7 +9,7 @@
 </head>
 
 <body>
-  <div class="container login-container">
+  <div class="container">
     <h2>🔐 Login Admin</h2>
 
     <input
@@ -25,14 +26,12 @@
       autocomplete="current-password"
     >
 
-    <div id="loginError" class="error-text"></div>
+    <div id="loginError"></div>
 
     <button onclick="login()">Login</button>
   </div>
 
-  <!-- Firebase & Auth -->
-  <script type="module" src="../assets/js/firebase.js"></script>
+  <!-- WAJIB MODULE -->
   <script type="module" src="../assets/js/auth.js"></script>
 </body>
 </html>
-
