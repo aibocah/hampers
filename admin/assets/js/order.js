@@ -1,15 +1,13 @@
 /* ==================================================
-   ORDER.JS — FINAL (RENDER PRODUK DARI ADMIN)
-   ================================================== */
+   ORDER.JS — FINAL (RENDER PRODUK DARI FIRESTORE)
+================================================== */
 
 import { db } from "./firebase.js";
 import {
   collection,
   getDocs,
   addDoc,
-  serverTimestamp,
-  query,
-  where
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===============================
@@ -17,7 +15,7 @@ import {
 ================================ */
 const productList = document.getElementById("productList");
 
-/* MODAL */
+/* modal */
 const modal = document.getElementById("modal");
 const modalTitle = document.getElementById("modalTitle");
 const modalPrice = document.getElementById("modalPrice");
@@ -36,22 +34,18 @@ const formError = document.getElementById("formError");
 let selectedProduct = null;
 
 /* ===============================
-   LOAD PRODUK (DARI ADMIN)
+   LOAD PRODUCTS
+   👉 DIPANGGIL OTOMATIS SAAT FILE DIBUKA
 ================================ */
 async function loadProducts() {
   productList.innerHTML = "⏳ Memuat produk...";
 
   try {
-    const q = query(
-      collection(db, "products"),
-      where("active", "==", true)
-    );
-
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(collection(db, "products"));
     productList.innerHTML = "";
 
     if (snapshot.empty) {
-      productList.innerHTML = "❌ Belum ada produk aktif";
+      productList.innerHTML = "❌ Belum ada produk";
       return;
     }
 
@@ -60,7 +54,6 @@ async function loadProducts() {
 
       const card = document.createElement("div");
       card.className = "card product-card";
-
       card.innerHTML = `
         <img src="${p.image}" alt="${p.title}">
         <h3>${p.title}</h3>
@@ -70,21 +63,20 @@ async function loadProducts() {
       `;
 
       card.onclick = () => openProduct({
-        title: p.title,
-        price: Number(p.price),
-        desc: p.desc || "",
-        image: p.image,
-        custom: p.custom === true
+        ...p,
+        custom: p.custom || false
       });
 
       productList.appendChild(card);
     });
-
   } catch (err) {
+    productList.innerHTML = "❌ Gagal load produk";
     console.error(err);
-    productList.innerHTML = "❌ Gagal memuat produk";
   }
 }
+
+/* AUTO LOAD */
+loadProducts();
 
 /* ===============================
    OPEN MODAL
@@ -94,8 +86,8 @@ window.openProduct = function (product) {
 
   modalTitle.textContent = product.title;
   modalPrice.textContent =
-    "Rp " + product.price.toLocaleString("id-ID");
-  modalDesc.textContent = product.desc;
+    "Rp " + Number(product.price).toLocaleString("id-ID");
+  modalDesc.textContent = product.desc || "";
 
   customSection.style.display = product.custom ? "block" : "none";
 
@@ -127,39 +119,23 @@ window.orderFromModal = async function () {
     return;
   }
 
-  let customItems = [];
-  if (selectedProduct.custom) {
-    document
-      .querySelectorAll('#modal input[type="checkbox"]:checked')
-      .forEach(el => customItems.push(el.value));
-
-    if (customItems.length === 0 && !note) {
-      showError("Pilih minimal 1 isian custom ✨");
-      return;
-    }
-  }
-
   const orderData = {
     name,
     address,
     phone,
     product: selectedProduct.title,
-    price: selectedProduct.price,
-    desc: selectedProduct.desc,
-    customItems,
+    price: Number(selectedProduct.price),
+    desc: selectedProduct.desc || "-",
     note: note || "-",
     status: "baru",
     createdAt: serverTimestamp()
   };
 
-  try {
-    await addDoc(collection(db, "orders"), orderData);
-  } catch (err) {
-    console.error(err);
-    showError("Gagal menyimpan order");
-    return;
-  }
+  await addDoc(collection(db, "orders"), orderData);
 
+  /* ===============================
+     WHATSAPP
+  ================================ */
   const message = `
 Halo, saya mau pesan hampers 🎁
 
@@ -169,9 +145,6 @@ No WA: ${phone}
 
 Produk: ${orderData.product}
 Harga: Rp ${orderData.price.toLocaleString("id-ID")}
-
-Custom:
-${customItems.join(", ") || "-"}
 
 Catatan:
 ${note || "-"}
@@ -203,11 +176,4 @@ function resetForm() {
   buyerAddress.value = "";
   buyerPhone.value = "";
   customText.value = "";
-
-  document
-    .querySelectorAll('#modal input[type="checkbox"]')
-    .forEach(el => (el.checked = false));
 }
-
-/* INIT */
-loadProducts();
