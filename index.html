@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,136 +5,153 @@
   <title>Hampers Lebaran</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/modal.css">
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <!-- HEADER -->
-  <h1 class="lebaran-title">
-    <span class="icon">🌙</span>
-    Hampers Lebaran Idul Fitri
-    <span class="icon">🎁</span>
-  </h1>
-  <p class="subtitle">Pilih hampers terbaik untuk keluarga & kerabat</p>
+    <!-- ================= HEADER ================= -->
+    <header>
+      <h1 class="lebaran-title">
+        <span class="icon">🌙</span>
+        Hampers Lebaran Idul Fitri
+        <span class="icon">🎁</span>
+      </h1>
+      <p class="subtitle">
+        Pilih hampers terbaik untuk keluarga & kerabat
+      </p>
+    </header>
 
-  <!-- PRODUK -->
-  <div class="card"
-  onclick="openProduct(
-    'Hampers Anyaman',
-    'Rp83.000',
-    'Fanta 1l, Gula Rose Brand 1kg, Teh Celup, Kopi Hitam, Roma Kelapa',
-    false
-  )">
-    <img src="assets/images/hampers-1.jpg">
-    <h3>Hampers Anyaman</h3>
-    <p class="price">Rp83.000</p>
-  </div>
+    <!-- ================= PRODUK ================= -->
 
-    <div class="card"
-  onclick="openProduct(
-    'Hampers Paket 3',
-    'Rp75.000',
-    'Sirup ABC orange, Kopi Kapal Api, Gula Rose Brand 1Kg, Kokola Majo, Astor 2, Nabati Big Rolls',
-    false
-  )">
-    <img src="assets/images/hampers-4.jpg">
-    <h3>Hampers Paket 3</h3>
-    <p class="price">Rp75.000</p>
+    <!-- Hampers Anyaman -->
+    <div class="card product-card"
+      onclick="openProduct(
+        'Hampers Anyaman',
+        'Rp83.000',
+        'Fanta 1L, Gula Rose Brand 1kg, Teh Celup, Kopi Hitam, Roma Kelapa',
+        false
+      )">
+      <img src="assets/images/hampers-1.jpg" alt="Hampers Anyaman">
+      <h3>Hampers Anyaman</h3>
+      <p class="price">Rp83.000</p>
     </div>
-  
-  <div class="card"
-  onclick="openProduct(
-    'Hampers Paket 2',
-    'Rp60.000',
-    'Teh Botol Sosro 1L, Biskotto Potato, Kokola Majo, Nextar, Mie Tasty Bakmi Ayam',
-    false
-  )">
-    <img src="assets/images/hampers-2.jpg">
-    <h3>Hampers Paket 2</h3>
-    <p class="price">Rp60.000</p>
+
+    <!-- Hampers Paket 3 -->
+    <div class="card product-card"
+      onclick="openProduct(
+        'Hampers Paket 3',
+        'Rp75.000',
+        'Sirup ABC Orange, Kopi Kapal Api, Gula Rose Brand 1kg, Kokola Majo, Astor 2, Nabati Big Rolls',
+        false
+      )">
+      <img src="assets/images/hampers-4.jpg" alt="Hampers Paket 3">
+      <h3>Hampers Paket 3</h3>
+      <p class="price">Rp75.000</p>
+    </div>
+
+    <!-- Hampers Paket 2 -->
+    <div class="card product-card"
+      onclick="openProduct(
+        'Hampers Paket 2',
+        'Rp60.000',
+        'Teh Botol Sosro 1L, Biskotto Potato, Kokola Majo, Nextar, Mie Tasty Bakmi Ayam',
+        false
+      )">
+      <img src="assets/images/hampers-2.jpg" alt="Hampers Paket 2">
+      <h3>Hampers Paket 2</h3>
+      <p class="price">Rp60.000</p>
+    </div>
+
+    <!-- Hampers Paket 1 -->
+    <div class="card product-card"
+      onclick="openProduct(
+        'Hampers Paket 1',
+        'Rp50.000',
+        'Teh Celup, Gula Seribu Bintang 450gr, Hatari See Hong Puff, Mie Tasty Ayam Geprek',
+        false
+      )">
+      <img src="assets/images/hampers-3.jpg" alt="Hampers Paket 1">
+      <h3>Hampers Paket 1</h3>
+      <p class="price">Rp50.000</p>
+    </div>
+
+    <!-- Hampers Custom -->
+    <div class="card product-card"
+      onclick="openProduct(
+        'Hampers Custom (Isi Bebas)',
+        'Harga Menyesuaikan',
+        'Isi bebas sesuai kebutuhan & budget',
+        true
+      )">
+      <img src="assets/images/hampers-custom.jpg" alt="Hampers Custom">
+      <h3>Hampers Custom (Isi Bebas)</h3>
+      <p class="price">Harga Menyesuaikan</p>
+    </div>
+
+    <!-- ================= SARAN ================= -->
+    <div class="card info-card">
+      <h3>Saran Produk</h3>
+      <ul>
+        <li>✔ Cocok untuk keluarga → Hampers Anyaman</li>
+        <li>✔ Untuk teman → Hampers Paket 1</li>
+        <li>✔ Budget hemat → Hampers Paket 2</li>
+        <li>✔ Sesuai keinginan → Hampers Custom</li>
+      </ul>
+    </div>
+
   </div>
 
-  <div class="card"
-  onclick="openProduct(
-    'Hampers Paket 1',
-    'Rp50.000',
-    'Teh Celup, Gula Seribu Bintang 450 gr, Hatari See Hong Puff, Mie Tasty Ayam Geprek',
-    false
-  )">
-    <img src="assets/images/hampers-3.jpg">
-    <h3>Hampers Paket 1</h3>
-    <p class="price">Rp50.000</p>
-  </div>
+  <!-- ================= MODAL ================= -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">✖</span>
 
-  <!-- PRODUK CUSTOM -->
-  <div class="card"
-  onclick="openProduct(
-    'Hampers Custom (Isi Bebas)',
-    'Harga Menyesuaikan',
-    'Isi bebas sesuai kebutuhan & budget',
-    true
-  )">
-    <img src="assets/images/hampers-custom.jpg">
-    <h3>Hampers Custom (Isi Bebas)</h3>
-    <p class="price">Harga Menyesuaikan</p>
-  </div>
+      <h3 id="modalTitle"></h3>
+      <p><b>Harga:</b> <span id="modalPrice"></span></p>
+      <p id="modalDesc"></p>
 
-  <!-- SARAN -->
-  <div class="card">
-    <h2>Saran Produk</h2>
-    <ul>
-      <li>✔ Cocok untuk keluarga → Hampers Anyaman</li>
-      <li>✔ Untuk teman → Hampers Box 1</li>
-      <li>✔ Budget hemat → Hampers Box 2</li>
-      <li>✔ Ingin Sesuaikan keinginan → Hampers Costom</li>
-    </ul>
-  </div>
+      <!-- Custom Section -->
+      <div id="customSection" style="display:none">
+        <hr>
+        <h4>Custom Isian</h4>
+        <small>* Harga dikonfirmasi via WhatsApp</small><br><br>
 
-</div>
+        <label><input type="checkbox" value="Sirup"> Sirup</label><br>
+        <label><input type="checkbox" value="Biskuit"> Biskuit</label><br>
+        <label><input type="checkbox" value="Kopi / Teh"> Kopi / Teh</label><br>
+        <label><input type="checkbox" value="Kurma"> Kurma</label><br>
 
-<!-- MODAL -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">✖</span>
+        <textarea
+          id="customText"
+          placeholder="Tulis isian custom lain (opsional)"
+          style="width:100%;margin-top:10px">
+        </textarea>
+      </div>
 
-    <h3 id="modalTitle"></h3>
-    <p><b>Harga:</b> <span id="modalPrice"></span></p>
-    <p id="modalDesc"></p>
-
-    <div id="customSection" style="display:none">
       <hr>
-      <h4>Custom Isian</h4>
-      <small>* Harga dikonfirmasi via WhatsApp</small><br><br>
 
-      <label><input type="checkbox" value="Sirup"> Sirup</label><br>
-      <label><input type="checkbox" value="Biskuit"> Biskuit</label><br>
-      <label><input type="checkbox" value="Kopi / Teh"> Kopi / Teh</label><br>
-      <label><input type="checkbox" value="Kurma"> Kurma</label><br>
+      <!-- Data Pembeli -->
+      <h4>Data Pembeli</h4>
+      <input id="buyerName" placeholder="Nama Lengkap">
+      <input id="buyerAddress" placeholder="Alamat Pengiriman">
+      <input id="buyerPhone" placeholder="No WhatsApp">
 
-      <textarea id="customText"
-        placeholder="Tulis isian custom lain (opsional)"
-        style="width:100%;margin-top:10px"></textarea>
+      <div id="formError"></div>
+
+      <button onclick="orderFromModal()">
+        Pesan via WhatsApp
+      </button>
     </div>
-
-    <hr>
-
-    <h4>Data Pembeli</h4>
-    <input id="buyerName" placeholder="Nama Lengkap">
-    <input id="buyerAddress" placeholder="Alamat Pengiriman">
-    <input id="buyerPhone" placeholder="No WhatsApp">
-
-    <div id="formError"></div>
-
-    <button onclick="orderFromModal()">
-      Pesan via WhatsApp
-    </button>
   </div>
-</div>
 
-<script src="assets/js/modal.js"></script>
+  <!-- JS -->
+  <script src="assets/js/modal.js"></script>
+
 </body>
 </html>
+
