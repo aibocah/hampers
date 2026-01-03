@@ -1,6 +1,6 @@
 // LOGIN CONFIG
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "12345";
+const ADMIN_USER = "Septi";
+const ADMIN_PASS = "cintaneanwar";
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
