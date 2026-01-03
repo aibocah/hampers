@@ -5,89 +5,57 @@
   <title>Hampers Lebaran</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="admin/assets/css/style.css">
-  <link rel="stylesheet" href="admin/assets/css/modal.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/modal.css">
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- ================= HEADER ================= -->
-    <header>
-      <h1 class="lebaran-title">
-        <span class="icon">🌙</span>
-        Hampers Lebaran Idul Fitri
-        <span class="icon">🎁</span>
-      </h1>
-      <p class="subtitle">
-        Pilih hampers terbaik untuk keluarga & kerabat
-      </p>
-    </header>
+  <header>
+    <h1 class="lebaran-title">🌙 Hampers Lebaran Idul Fitri 🎁</h1>
+    <p class="subtitle">Pilih hampers terbaik untuk keluarga & kerabat</p>
+  </header>
 
-    <!-- ================= PRODUK (DINAMIS) ================= -->
-    <div id="productList" class="product-grid">
-      <!-- produk dari Firestore akan dirender di sini -->
-    </div>
+  <!-- PRODUK -->
+  <div id="productList" class="product-grid"></div>
 
-    <!-- ================= SARAN ================= -->
-    <div class="card info-card">
-      <h3>Saran Produk</h3>
-      <ul>
-        <li>✔ Untuk keluarga → Hampers Anyaman</li>
-        <li>✔ Untuk teman → Hampers Paket 1</li>
-        <li>✔ Budget hemat → Hampers Paket 2</li>
-        <li>✔ Isi bebas → Hampers Custom</li>
-      </ul>
-    </div>
+</div>
 
-  </div>
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">✖</span>
 
-  <!-- ================= MODAL ================= -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">✖</span>
+    <h3 id="modalTitle"></h3>
+    <p><b>Harga:</b> <span id="modalPrice"></span></p>
+    <p id="modalDesc"></p>
 
-      <h3 id="modalTitle"></h3>
-      <p><b>Harga:</b> <span id="modalPrice"></span></p>
-      <p id="modalDesc"></p>
-
-      <!-- CUSTOM -->
-      <div id="customSection" style="display:none">
-        <hr>
-        <h4>Custom Isian</h4>
-        <small>* Harga dikonfirmasi via WhatsApp</small><br><br>
-
-        <label><input type="checkbox" value="Sirup"> Sirup</label><br>
-        <label><input type="checkbox" value="Biskuit"> Biskuit</label><br>
-        <label><input type="checkbox" value="Kopi / Teh"> Kopi / Teh</label><br>
-        <label><input type="checkbox" value="Kurma"> Kurma</label><br>
-
-        <textarea
-          id="customText"
-          placeholder="Tulis isian custom lain (opsional)"
-          style="width:100%;margin-top:10px">
-        </textarea>
-      </div>
-
+    <div id="customSection" style="display:none">
       <hr>
-
-      <!-- BUYER -->
-      <h4>Data Pembeli</h4>
-      <input id="buyerName" placeholder="Nama Lengkap">
-      <input id="buyerAddress" placeholder="Alamat Pengiriman">
-      <input id="buyerPhone" placeholder="No WhatsApp">
-
-      <div id="formError" style="display:none;color:red;margin-top:8px"></div>
-
-      <button onclick="orderFromModal()">Pesan via WhatsApp</button>
+      <h4>Custom Isian</h4>
+      <label><input type="checkbox" value="Sirup"> Sirup</label><br>
+      <label><input type="checkbox" value="Biskuit"> Biskuit</label><br>
+      <label><input type="checkbox" value="Kopi / Teh"> Kopi / Teh</label><br>
+      <label><input type="checkbox" value="Kurma"> Kurma</label><br>
+      <textarea id="customText" placeholder="Catatan tambahan"></textarea>
     </div>
-  </div>
 
-  <!-- ================= JS ================= -->
-  <script type="module" src="admin/assets/js/firebase.js"></script>
-  <script type="module" src="admin/assets/js/order.js"></script>
+    <hr>
+
+    <input id="buyerName" placeholder="Nama Lengkap">
+    <input id="buyerAddress" placeholder="Alamat">
+    <input id="buyerPhone" placeholder="No WhatsApp">
+    <div id="formError"></div>
+
+    <button onclick="orderFromModal()">Pesan via WhatsApp</button>
+  </div>
+</div>
+
+<script src="assets/js/products.js"></script>
+<script src="assets/js/modal.js"></script>
+<script src="assets/js/order.js"></script>
 
 </body>
 </html>
