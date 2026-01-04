@@ -5,8 +5,6 @@
     "price": 83000,
     "desc": "Fanta 1L, Gula Rose Brand 1kg, Teh Celup, Kopi Hitam, Roma Kelapa",
     "image": "img/hampers/hampers-1.jpg",
-    "custom": false,
-    "active": true
   },
   {
     "id": 2,
@@ -14,8 +12,6 @@
     "price": 75000,
     "desc": "Sirup ABC Orange, Kopi Kapal Api, Gula Rose Brand 1kg, Kokola Majo, Astor 2, Nabati Big Rolls",
     "image": "img/hampers/hampers-4.jpg",
-    "custom": false,
-    "active": true
   },
   {
     "id": 3,
@@ -23,8 +19,6 @@
     "price": 60000,
     "desc": "Teh Botol Sosro 1L, Biskotto Potato, Kokola Majo, Nextar, Mie Tasty Bakmi Ayam",
     "image": "img/hampers/hampers-2.jpg",
-    "custom": false,
-    "active": true
   },
     {
     "id": 4,
@@ -32,8 +26,6 @@
     "price": 50000,
     "desc": "Teh Celup, Gula Seribu Bintang 450 gr, Hatari See Hong Puff, Mie Tasty Ayam Geprek",
     "image": "img/hampers/hampers-3.jpg",
-    "custom": false,
-    "active": true
     },
   {
     "id": 5,
@@ -41,7 +33,5 @@
     "price": 0,
     "desc": "Isi bebas sesuai kebutuhan & budget",
     "image": "img/hampers/hampers-custom.jpg",
-    "custom": true,
-    "active": true
   }
 ]
