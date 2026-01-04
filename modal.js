@@ -1,6 +1,6 @@
 let selectedProduct = null;
 
-/* ================= REKOMENDASI ISI ================= */
+/* ===== REKOMENDASI KHUSUS CUSTOM ===== */
 const REKOMENDASI = [
   "Sirup Marjan",
   "Kurma Tunisia",
@@ -15,7 +15,7 @@ const REKOMENDASI = [
   "Sari Kurma"
 ];
 
-/* ================= MODAL CONTROL ================= */
+/* ===== MODAL ===== */
 function openModal(id) {
   selectedProduct = PRODUCTS.find(p => p.id === id);
   document.getElementById("orderModal").style.display = "flex";
@@ -26,16 +26,18 @@ function closeModal() {
   document.getElementById("orderModal").style.display = "none";
 }
 
-/* ================= CUSTOM HAMPERS ================= */
+/* ===== CUSTOM LOGIC ===== */
 function renderCustom() {
   const type = document.querySelector("input[name=type]:checked").value;
   const area = document.getElementById("customArea");
 
+  // JIKA BUKAN CUSTOM → KOSONGKAN
   if (type !== "custom") {
     area.innerHTML = "";
     return;
   }
 
+  // JIKA CUSTOM → TAMPILKAN ISI + REKOMENDASI
   area.innerHTML = `
     <h4>Pilih Isi Hampers</h4>
     ${selectedProduct.items.map(item => `
@@ -53,18 +55,39 @@ function renderCustom() {
   `;
 }
 
-/* ================= WHATSAPP ================= */
+/* ===== VALIDASI + WHATSAPP ===== */
 function sendWA() {
-  const name = document.getElementById("buyerName").value;
-  const address = document.getElementById("buyerAddress").value;
+  const name = document.getElementById("buyerName").value.trim();
+  const address = document.getElementById("buyerAddress").value.trim();
   const qty = document.getElementById("qty").value;
   const type = document.querySelector("input[name=type]:checked").value;
+
+  // ===== VALIDASI FORM =====
+  if (!name) {
+    alert("Nama wajib diisi");
+    return;
+  }
+
+  if (!address) {
+    alert("Alamat wajib diisi");
+    return;
+  }
+
+  if (!qty || qty < 1) {
+    alert("Jumlah minimal 1");
+    return;
+  }
 
   let items = selectedProduct.items;
 
   if (type === "custom") {
     items = [...document.querySelectorAll("#customArea input:checked")]
       .map(i => i.value);
+
+    if (items.length === 0) {
+      alert("Pilih minimal 1 isi hampers untuk custom");
+      return;
+    }
   }
 
   const msg = `
