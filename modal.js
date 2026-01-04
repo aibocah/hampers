@@ -75,13 +75,19 @@ function sendWA() {
     items = [...document.querySelectorAll("#customArea input:checked")].map(i => i.value);
   }
 
-  const msg = `PESANAN HAMPERS
-Nama: ${name}
-Alamat: ${address}
-Jumlah: ${qty}
-Produk: ${selectedProduct.name}
-Isi:
-- ${items.join("\n- ")}`;
+const msg = `
+🛍️ *PESANAN HAMPERS LEBARAN*
 
-  window.open(`https://wa.me/62895339847320?text=${encodeURIComponent(msg)}`);
-}
+📦 Produk: ${selectedProduct.name}
+🔢 Jumlah: ${qty}
+
+🎁 Isi Hampers:
+- ${items.join("\n- ")}
+
+👤 Nama: ${name}
+📍 Alamat:
+${address}
+
+Terima kasih 🙏
+`;
+
