@@ -1,6 +1,6 @@
 async function loadProducts() {
   try {
-    const res = await fetch("products.json", { cache: "no-store" });
+    const res = await fetch("./products.json", { cache: "no-store" });
     if (!res.ok) throw new Error("Gagal load products.json");
     const products = await res.json();
     renderProducts(products);
