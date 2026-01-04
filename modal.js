@@ -1,16 +1,6 @@
 let selectedProduct = null;
 
-function openModal(id) {
-  selectedProduct = PRODUCTS.find(p => p.id === id);
-  document.getElementById("orderModal").style.display = "flex";
-  renderCustom();
-}
-
-function closeModal() {
-  orderModal.style.display = "none";
-}
-
-function renderCustom() 
+/* ================= REKOMENDASI ISI ================= */
 const REKOMENDASI = [
   "Sirup Marjan",
   "Kurma Tunisia",
@@ -23,26 +13,20 @@ const REKOMENDASI = [
   "Gula Aren",
   "Madu",
   "Sari Kurma"
-];{
-  const type = document.querySelector("input[name=type]:checked").value;
-  const area = document.getElementById("customArea");
+];
 
-  if (type !== "custom") {
-    area.innerHTML = "";
-    return;
-  }
-  area.innerHTML = `
-    <h4>Pilih Isi Hampers</h4>
-    ${selectedProduct.items.map(i =>
-      `<label><input type="checkbox" value="${i}"> ${i}</label>`
-    ).join("")}
-
-    <h4>Rekomendasi</h4>
-    ${selectedProduct.recommendations.map(i =>
-      `<label><input type="checkbox" value="${i}"> ${i}</label>`
-    ).join("")}
-  `;
+/* ================= MODAL CONTROL ================= */
+function openModal(id) {
+  selectedProduct = PRODUCTS.find(p => p.id === id);
+  document.getElementById("orderModal").style.display = "flex";
+  renderCustom();
 }
+
+function closeModal() {
+  document.getElementById("orderModal").style.display = "none";
+}
+
+/* ================= CUSTOM HAMPERS ================= */
 function renderCustom() {
   const type = document.querySelector("input[name=type]:checked").value;
   const area = document.getElementById("customArea");
@@ -54,28 +38,36 @@ function renderCustom() {
 
   area.innerHTML = `
     <h4>Pilih Isi Hampers</h4>
-    ${selectedProduct.items.map(i =>
-      `<label><input type="checkbox" value="${i}"> ${i}</label>`
-    ).join("")}
+    ${selectedProduct.items.map(item => `
+      <label>
+        <input type="checkbox" value="${item}"> ${item}
+      </label>
+    `).join("")}
 
     <h4>Rekomendasi (Opsional)</h4>
-    ${REKOMENDASI.map(i =>
-      `<label><input type="checkbox" value="${i}"> ${i}</label>`
-    ).join("")}
+    ${REKOMENDASI.map(item => `
+      <label>
+        <input type="checkbox" value="${item}"> ${item}
+      </label>
+    `).join("")}
   `;
 }
 
+/* ================= WHATSAPP ================= */
 function sendWA() {
-  const name = buyerName.value;
-  const address = buyerAddress.value;
+  const name = document.getElementById("buyerName").value;
+  const address = document.getElementById("buyerAddress").value;
   const qty = document.getElementById("qty").value;
+  const type = document.querySelector("input[name=type]:checked").value;
 
   let items = selectedProduct.items;
-  if (document.querySelector("input[name=type]:checked").value === "custom") {
-    items = [...document.querySelectorAll("#customArea input:checked")].map(i => i.value);
+
+  if (type === "custom") {
+    items = [...document.querySelectorAll("#customArea input:checked")]
+      .map(i => i.value);
   }
 
-const msg = `
+  const msg = `
 🛍️ *PESANAN HAMPERS LEBARAN*
 
 📦 Produk: ${selectedProduct.name}
@@ -90,4 +82,8 @@ ${address}
 
 Terima kasih 🙏
 `;
+
+  const wa = `https://wa.me/62895339847320?text=${encodeURIComponent(msg)}`;
+  window.open(wa);
+}
 
