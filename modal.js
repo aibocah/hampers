@@ -10,7 +10,20 @@ function closeModal() {
   orderModal.style.display = "none";
 }
 
-function renderCustom() {
+function renderCustom() 
+const REKOMENDASI = [
+  "Sirup Marjan",
+  "Kurma Tunisia",
+  "Biskuit Kaleng",
+  "Nastar Premium",
+  "Kastengel",
+  "Coklat Silverqueen",
+  "Teh Premium",
+  "Kopi Sachet",
+  "Gula Aren",
+  "Madu",
+  "Sari Kurma"
+];{
   const type = document.querySelector("input[name=type]:checked").value;
   const area = document.getElementById("customArea");
 
@@ -18,7 +31,6 @@ function renderCustom() {
     area.innerHTML = "";
     return;
   }
-
   area.innerHTML = `
     <h4>Pilih Isi Hampers</h4>
     ${selectedProduct.items.map(i =>
@@ -50,5 +62,5 @@ Produk: ${selectedProduct.name}
 Isi:
 - ${items.join("\n- ")}`;
 
-  window.open(`https://wa.me/62XXXXXXXXXX?text=${encodeURIComponent(msg)}`);
+  window.open(`https://wa.me/62895339847320?text=${encodeURIComponent(msg)}`);
 }
