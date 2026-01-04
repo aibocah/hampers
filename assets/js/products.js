@@ -1,43 +1,45 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const productList = document.getElementById("productList");
-  let products = JSON.parse(localStorage.getItem("products")) || [];
+async function loadProducts() {
+  try {
+    const res = await fetch("products.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("Gagal load products.json");
+    const products = await res.json();
+    renderProducts(products);
+  } catch (err) {
+    console.error(err);
+    document.getElementById("productList").innerHTML =
+      "<p style='text-align:center;color:#999'>Produk belum tersedia</p>";
+  }
+}
 
-  render(products);
+function renderProducts(products) {
+  const list = document.getElementById("productList");
+  list.innerHTML = "";
 
-  function render(data) {
-    productList.innerHTML = "";
-
-    if (data.length === 0) {
-      // Menampilkan pesan jika tidak ada produk
-      productList.innerHTML = "<p style='text-align:center; color:#6b7280;'>Belum ada produk</p>";
-      return;
-    }
-
-    data.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "product-card";
-
-      card.innerHTML = `
+  products.forEach(p => {
+    list.innerHTML += `
+      <div class="card product-card">
         <div class="swipe-container">
           <div class="swipe-track">
-            ${(p.images || []).map(img =>
-              `<img src="${img}" onclick="zoomImage('${img}')">`
-            ).join("")}
+            ${p.images
+              .map(
+                img =>
+                  `<img src="${img}" alt="${p.name}" onclick="zoomImage('${img}')">`
+              )
+              .join("")}
           </div>
         </div>
 
         <h3>${p.name}</h3>
         <p>${p.description}</p>
-        <strong>Rp ${p.price.toLocaleString("id-ID")}</strong>
+        <div class="price">Rp ${p.price.toLocaleString("id-ID")}</div>
 
-        <button onclick='openModal(${JSON.stringify(p)})'>Pesan</button>
-      `;
-
-      productList.appendChild(card);
-      initSwipe(card);
-    });
-  }
-});
+        <button onclick="orderProduct('${p.name}', ${p.price})">
+          Pesan
+        </button>
+      </div>
+    `;
+  });
+}
 
 // ===== SWIPE LOGIC =====
 function initSwipe(card) {
