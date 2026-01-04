@@ -43,6 +43,27 @@ const REKOMENDASI = [
     ).join("")}
   `;
 }
+function renderCustom() {
+  const type = document.querySelector("input[name=type]:checked").value;
+  const area = document.getElementById("customArea");
+
+  if (type !== "custom") {
+    area.innerHTML = "";
+    return;
+  }
+
+  area.innerHTML = `
+    <h4>Pilih Isi Hampers</h4>
+    ${selectedProduct.items.map(i =>
+      `<label><input type="checkbox" value="${i}"> ${i}</label>`
+    ).join("")}
+
+    <h4>Rekomendasi (Opsional)</h4>
+    ${REKOMENDASI.map(i =>
+      `<label><input type="checkbox" value="${i}"> ${i}</label>`
+    ).join("")}
+  `;
+}
 
 function sendWA() {
   const name = buyerName.value;
