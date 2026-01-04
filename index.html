@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Hampers Lebaran</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="modal.css">
+</head>
+<body>
+
+<header class="hero">
+  <h1>Hampers Lebaran Eksklusif 🎁</h1>
+  <p>Kirim ke keluarga & orang tersayang</p>
+</header>
+
+<section id="product-list" class="grid"></section>
+
+<!-- Modal Order -->
+<div id="orderModal" class="modal">
+  <div class="modal-box">
+    <h3>Form Pemesanan</h3>
+    <input id="buyerName" placeholder="Nama lengkap">
+    <textarea id="buyerAddress" placeholder="Alamat lengkap"></textarea>
+    <input id="qty" type="number" value="1" min="1">
+
+    <h4>Pilih Jenis Hampers</h4>
+    <label><input type="radio" name="type" value="paket" checked> Paket siap kirim</label>
+    <label><input type="radio" name="type" value="custom"> Custom isi hampers</label>
+
+    <div id="customArea"></div>
+
+    <button onclick="sendWA()">Kirim ke WhatsApp</button>
+    <button onclick="closeModal()">Tutup</button>
+  </div>
+</div>
+
+<script src="products.js"></script>
+<script src="order.js"></script>
+<script src="modal.js"></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center}
+.modal-box{background:#fff;padding:20px;border-radius:12px;width:90%;max-width:400px}

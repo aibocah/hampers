@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Produk</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Admin Produk</h2>
+
+<input id="name" placeholder="Nama Produk">
+<input id="price" placeholder="Harga">
+<textarea id="desc" placeholder="Deskripsi"></textarea>
+<input id="images" placeholder="URL gambar (pisahkan koma)">
+<textarea id="items" placeholder="Isi hampers (pisahkan enter)"></textarea>
+<textarea id="recom" placeholder="Rekomendasi isi (pisahkan enter)"></textarea>
+
+<button onclick="addProduct()">Tambah Produk</button>
+<button onclick="exportData()">Export products.js</button>
+
+<pre id="preview"></pre>
+
+<script src="admin.js"></script>
+</body>
+</html>
