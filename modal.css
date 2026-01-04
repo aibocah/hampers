@@ -1,0 +1,72 @@
+/* ===============================
+   MODAL — FINAL & CLEAN
+=============================== */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* isi modal */
+.modal-content {
+  background: #fff;
+  width: 90%;
+  max-width: 420px;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  animation: modalFade .25s ease;
+}
+
+/* tombol close */
+.close {
+  float: right;
+  cursor: pointer;
+  color: #ff4d4f;
+  font-size: 18px;
+}
+
+/* input & textarea */
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* tombol utama */
+.modal-content button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  opacity: .9;
+}
+
+/* animasi halus */
+@keyframes modalFade {
+  from {
+    transform: scale(.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
